@@ -24,6 +24,14 @@ A question earns its place only if two plausible answers produce two different s
 
 Every question you ask costs the user patience. Spend it on the load-bearing ones.
 
+## Two modes
+
+**Base mode** — no `docs/SPEC.md` exists. Write one. This is the greenfield path.
+
+**Delta mode** — `docs/SPEC.md` already exists. Write a change proposal under `docs/changes/NNNN-slug/PROPOSAL.md` and **do not modify the spec**. `spec-drift` merges it once the work ships.
+
+The mode is detected, never asked. Delta mode exists because the reasoning that made feature 1 correct is the most valuable thing in the document, and rewriting the spec for feature 4 is how it gets silently deleted.
+
 ---
 
 ## Workflow
@@ -32,9 +40,11 @@ Every question you ask costs the user patience. Spend it on the load-bearing one
 
 **Read `docs/CONSTITUTION.md` first if it exists.** It fixes the stack, layout, naming, size limits, and verify command before you decide anything. Constitution rules are constraints, not options — never propose something it forbids, and never restate what it already says.
 
+**Then check for `docs/SPEC.md`.** If it exists, you are in delta mode — read it in full before anything else, especially §3 Decisions, §8 Edge Cases, and §9 Security. Those record *why*, and a proposal that contradicts one without saying so is a regression you are about to author.
+
 If a codebase is present, read it before asking anything. Check `package.json` / `pyproject.toml` / `go.mod` / `*.csproj`, the directory layout, any existing `README.md`, `CLAUDE.md`, `schema.prisma`, or migrations. Existing choices are constraints too.
 
-If there is neither, skip to Phase 1.
+If there is none of this, skip to Phase 1.
 
 ### Phase 1 — Classify the idea
 
@@ -73,9 +83,11 @@ Be ruthless here. The most common failure in AI-generated specs is a message que
 
 Where you make a call the user didn't explicitly authorize, it goes in `Assumptions` — visible, numbered, easy to reject. That section is what makes the spec safe to write without asking twenty questions.
 
-### Phase 4 — Write the spec
+### Phase 4 — Write the spec, or the proposal
 
-Read `references/spec-template.md` and follow its section order exactly.
+**In delta mode, stop and read `references/change-proposals.md` instead.** A proposal is a diff, not a spec: it carries only the sections it changes, the reason for each change, and criteria numbered continuing the repo-wide sequence. Everything below still applies to the sections it does touch.
+
+In base mode, read `references/spec-template.md` and follow its section order exactly.
 
 **§2.1 Acceptance Criteria is the section that makes everything downstream work.** Read `references/acceptance-criteria.md` and write the criteria in EARS notation with stable `AC-###` identifiers. `spec-tasks` cites those IDs, `spec-implement` verifies against them, and `spec-drift` reports against them. A spec without them degrades the whole pipeline to prose-judging.
 
@@ -135,6 +147,7 @@ Match depth to stakes. A weekend CLI tool gets a one-page spec — sections 1, 2
 ## Reference files
 
 - `references/acceptance-criteria.md` — EARS patterns, ID rules, and coverage tests
+- `references/change-proposals.md` — delta mode: the proposal format, ordinals, and what may not be changed silently
 - `references/decision-rules.md` — the question bank, and the rules mapping answers to architecture
 - `references/code-conventions.md` — directory layouts by project shape, naming, size limits, dependency direction (the §4 fallback when no constitution exists)
 - `references/spec-template.md` — exact output structure with per-section guidance

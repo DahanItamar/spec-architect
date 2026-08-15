@@ -95,6 +95,99 @@ export function classifyEars(text) {
   return 'ubiquitous';
 }
 
+/** The body of a heading, up to the next heading of the same or higher level. */
+export function sliceSection(markdown, headingPattern) {
+  const lines = markdown.split(/\r?\n/);
+  const start = lines.findIndex((l) => headingPattern.test(l));
+  if (start === -1) return '';
+  const level = (/^(#+)/.exec(lines[start]) ?? ['', ''])[1].length;
+  const out = [];
+  for (let i = start + 1; i < lines.length; i++) {
+    const m = /^(#+)\s/.exec(lines[i]);
+    if (m && m[1].length <= level) break;
+    out.push(lines[i]);
+  }
+  return out.join('\n');
+}
+
+const EDIT_HEADING = /^###\s+§(\d+(?:\.\d+)?)\s+(.+?)\s+—\s+(add|replace|remove)\s*$/gm;
+
+/** Sections whose entries record a reason. Changing one silently is a regression. */
+export const REASONED_SECTIONS = ['3', '8', '9'];
+
+export function parseProposal(markdown) {
+  const ordinal = /^#\s+(\d{4})\s+—\s+(.+)$/m.exec(markdown);
+  const status = /^>\s*Status:\s*([a-z-]+)/m.exec(markdown);
+  const edits = [];
+  for (const m of markdown.matchAll(EDIT_HEADING)) {
+    const body = sliceSection(markdown, new RegExp(`^${escapeRegExp(m[0].trim())}$`));
+    edits.push({
+      section: m[1],
+      title: m[2],
+      operation: m[3],
+      hasReason: /\*\*Reason:\*\*/.test(body),
+    });
+  }
+  return {
+    ordinal: ordinal?.[1] ?? null,
+    title: ordinal?.[2] ?? null,
+    status: status?.[1] ?? null,
+    added: extractCriteria(sliceSection(markdown, /^##\s+Criteria added/)),
+    retired: extractCriteria(sliceSection(markdown, /^##\s+Criteria retired/)),
+    edits,
+  };
+}
+
+function escapeRegExp(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/** Everything that must be true before a shipped proposal may be merged. */
+export function proposalViolations(proposal, specCriteria) {
+  const specIds = specCriteria.map((c) => c.id);
+  const problems = [];
+
+  for (const c of proposal.added) {
+    if (specIds.includes(c.id)) problems.push(`${c.id} already exists in the spec`);
+    if (!AC_ID.test(c.id)) problems.push(`${c.id} is not a valid identifier`);
+    if (!classifyEars(c.text)) problems.push(`${c.id} is not well-formed EARS`);
+  }
+
+  for (const c of proposal.retired) {
+    if (!specIds.includes(c.id)) problems.push(`${c.id} is retired but never existed`);
+  }
+
+  for (const e of proposal.edits) {
+    if (e.operation === 'remove' && !e.hasReason) {
+      problems.push(`§${e.section} remove has no reason`);
+    }
+    if (e.operation === 'replace' && REASONED_SECTIONS.includes(e.section) && !e.hasReason) {
+      problems.push(`§${e.section} replace has no reason, and §${e.section} records reasons`);
+    }
+  }
+
+  return problems;
+}
+
+/** Section overlaps between unarchived proposals. A sequencing decision, not a merge. */
+export function findConflicts(proposals) {
+  const out = [];
+  for (let i = 0; i < proposals.length; i++) {
+    for (let j = i + 1; j < proposals.length; j++) {
+      const a = new Set(proposals[i].edits.map((e) => e.section));
+      const shared = [...new Set(proposals[j].edits.map((e) => e.section))].filter((s) => a.has(s));
+      if (shared.length) {
+        out.push({ a: proposals[i].ordinal, b: proposals[j].ordinal, sections: shared });
+      }
+    }
+  }
+  return out;
+}
+
+export function renderTombstone(id, ordinal, reason) {
+  return `| ~~${id}~~ | *Retired in ${ordinal} — ${reason}* |`;
+}
+
 const TASK_ROW = /^\s*-\s*\[( |x)\]\s*(T-\d+)\s+(.+)$/gm;
 
 /** Extract tasks from a TASKS.md body. `closes:` is required (AC-005). */
