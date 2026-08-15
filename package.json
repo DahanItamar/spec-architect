@@ -1,0 +1,28 @@
+{
+  "name": "flowsystem",
+  "version": "2.0.0-alpha.1",
+  "description": "Spec-driven development for AI coding agents. Five Markdown skills, zero runtime dependencies.",
+  "license": "MIT",
+  "author": "Itamar Dahan",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DahanItamar/flowsystem.git"
+  },
+  "keywords": [
+    "spec-driven-development",
+    "claude-code",
+    "agent-skills",
+    "ears",
+    "agents-md"
+  ],
+  "scripts": {
+    "test": "node --test \"proof/**/*.test.js\"",
+    "lint": "markdownlint-cli2 \"**/*.md\"",
+    "format": "prettier --write \"**/*.md\""
+  },
+  "devDependencies": {
+    "markdownlint-cli2": "^0.14.0",
+    "prettier": "^3.3.0"
+  }
+}
