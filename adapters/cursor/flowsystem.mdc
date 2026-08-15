@@ -1,0 +1,19 @@
+---
+description: FlowSystem — spec-driven development in five stages. Read the stage file before specifying, planning, implementing, or auditing against a spec.
+globs: ["docs/SPEC.md", "docs/CONSTITUTION.md", "docs/changes/**"]
+alwaysApply: false
+---
+
+# FlowSystem
+
+Five stages, each a Markdown file of instructions. Read the one that applies and follow it.
+
+| Stage | Read this | When |
+| --- | --- | --- |
+| 1. Constitution | `skills/spec-constitution/SKILL.md` | New repo, or conventions are undocumented |
+| 2. Spec | `skills/spec-architect/SKILL.md` | An idea to specify, or a feature to add |
+| 3. Tasks | `skills/spec-tasks/SKILL.md` | A spec exists and work is about to start |
+| 4. Implement | `skills/spec-implement/SKILL.md` | A task list exists with unchecked tasks |
+| 5. Drift | `skills/spec-drift/SKILL.md` | After a milestone, or on returning to a project |
+
+This file holds no rules of its own. Every rule lives in `skills/`, so the two can never disagree.

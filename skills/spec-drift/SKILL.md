@@ -91,7 +91,7 @@ Show the whole picture first. Regressions at the top, then staleness, then undec
 
 Every entry carries: the spec claim, the file and line, the verdict, and the concrete fix for each direction. Never present a gap without a recommendation — an unranked list of forty differences is the same as no report.
 
-Then let the user choose. Batch the decisions into one `AskUserQuestion` call where the tool is available; don't walk through them one at a time.
+Then let the user choose. Batch the decisions into one `AskUserQuestion` call where the host agent provides it; where it does not, present them as one numbered list in a single message and wait for one reply. Never walk through them one at a time.
 
 ### Phase 5 — Apply
 
