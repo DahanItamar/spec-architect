@@ -48,7 +48,7 @@ for (const skill of listSkills()) {
     const { description } = parseFrontmatter(read('skills', skill, 'SKILL.md'));
     assert.match(
       description,
-      /\bUse (when|at|to|this)\b/i,
+      /\bUse\s+(when|after|before|at|to|for|this)\b/i,
       'description must contain trigger conditions, not just a summary',
     );
   });

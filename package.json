@@ -1,6 +1,6 @@
 {
   "name": "flowsystem",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-alpha.2",
   "description": "Spec-driven development for AI coding agents. Five Markdown skills, zero runtime dependencies.",
   "license": "MIT",
   "author": "Itamar Dahan",
