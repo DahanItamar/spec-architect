@@ -5,7 +5,20 @@ description: Execute a task list in order, verifying each task against the accep
 
 # Spec Implement
 
-**Stage 4 of 5.** `constitution → spec → tasks → implement → drift`
+**Stage 4 of 5 — Implement.** Before doing anything else, print this banner so the user
+can see where they are in the chain, filled in for this run:
+
+```markdown
+> **The spec chain — stage 4 of 5 · Implement**
+>
+> `1 constitution` · `2 spec` · `3 tasks` · **▶ 4 implement** · `5 drift`
+>
+> **Behind you:** a `TASKS.md` where every task names the criteria it closes.
+> **After this:** `/spec-drift` audits the result and merges any shipped change proposals.
+```
+
+The chain starts at `/spec-constitution`, then `/spec-architect`, then `/spec-tasks`. Then begin the workflow below, naming each phase as you enter it.
+A user who cannot tell which step they are on cannot tell whether to interrupt.
 
 This is the stage where drift is created. Every gap `spec-drift` finds later was introduced by someone building without checking. So the discipline here is narrow and non-negotiable:
 

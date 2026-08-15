@@ -5,7 +5,20 @@ description: Check whether the code still matches the project's technical spec, 
 
 # Spec Drift
 
-**Stage 5 of 5.** `constitution → spec → tasks → implement → drift`
+**Stage 5 of 5 — Drift.** Before doing anything else, print this banner so the user
+can see where they are in the chain, filled in for this run:
+
+```markdown
+> **The spec chain — stage 5 of 5 · Drift**
+>
+> `1 constitution` · `2 spec` · `3 tasks` · `4 implement` · **▶ 5 drift**
+>
+> **Behind you:** code built against the spec — by this pipeline or by hand.
+> **After this:** back to `/spec-architect` in delta mode for the next change. The chain loops here; it does not end.
+```
+
+The chain starts at `/spec-constitution`. Then begin the workflow below, naming each phase as you enter it.
+A user who cannot tell which step they are on cannot tell whether to interrupt.
 
 A spec is only worth having if it's true. The moment the code and the document disagree, the document stops being a reference and becomes a liability — because people still trust it.
 

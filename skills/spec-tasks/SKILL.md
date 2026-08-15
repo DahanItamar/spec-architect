@@ -5,7 +5,20 @@ description: Turn a technical spec or a change proposal into an ordered task lis
 
 # Spec Tasks
 
-**Stage 3 of 5.** `constitution → spec → tasks → implement → drift`
+**Stage 3 of 5 — Tasks.** Before doing anything else, print this banner so the user
+can see where they are in the chain, filled in for this run:
+
+```markdown
+> **The spec chain — stage 3 of 5 · Tasks**
+>
+> `1 constitution` · `2 spec` · **▶ 3 tasks** · `4 implement` · `5 drift`
+>
+> **Behind you:** `docs/SPEC.md` with numbered `AC-###` criteria in §2.1 — this stage cites them, it never invents them.
+> **After this:** `/spec-implement` executes the list, one task at a time.
+```
+
+The chain starts at `/spec-constitution`, then `/spec-architect`. Then begin the workflow below, naming each phase as you enter it.
+A user who cannot tell which step they are on cannot tell whether to interrupt.
 
 A spec says what the system must do. A task list says what to do next, in what order, and how you will know each step worked.
 

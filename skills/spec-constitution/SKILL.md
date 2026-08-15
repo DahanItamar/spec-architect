@@ -5,7 +5,20 @@ description: Write the repository's constitution — the principles, conventions
 
 # Spec Constitution
 
-**Stage 1 of 5.** `constitution → spec → tasks → implement → drift`
+**Stage 1 of 5 — Constitution.** Before doing anything else, print this banner so the user
+can see where they are in the chain, filled in for this run:
+
+```markdown
+> **The spec chain — stage 1 of 5 · Constitution**
+>
+> **▶ 1 constitution** · `2 spec` · `3 tasks` · `4 implement` · `5 drift`
+>
+> **Behind you:** nothing — this is the start of the chain.
+> **After this:** `/spec-architect` writes the spec that inherits this document.
+```
+
+Skip straight to `/spec-architect` if the repo's conventions are already settled. Then begin the workflow below, naming each phase as you enter it.
+A user who cannot tell which step they are on cannot tell whether to interrupt.
 
 A constitution answers one question: *what is true about this repository regardless of what we are building this week?*
 
