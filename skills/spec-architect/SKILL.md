@@ -1,6 +1,6 @@
 ---
 name: spec-architect
-description: Turn a rough product idea into an engineering-grade Technical Spec — architecture, data models, interfaces, acceptance criteria, edge cases, and risks — before any code is written. Use when someone describes something they want to build ("I want an app that…", "I'm thinking of building…", "how should I structure a…"), asks for a PRD, tech spec, architecture doc, system design, data model, or stack recommendation, or is starting a new project or major feature from only a loose description. Also use to reverse-engineer a spec from an existing codebase before a large change. Produces one Markdown file meant to live in the repo and be loaded as project context.
+description: Stage 2 of 5 in the spec chain. Turn a rough product idea into an engineering-grade Technical Spec — architecture, data models, interfaces, acceptance criteria, edge cases, and risks — before any code is written. Use when someone describes something they want to build ("I want an app that…", "I'm thinking of building…", "how should I structure a…"), asks for a PRD, tech spec, architecture doc, system design, data model, or stack recommendation, or is starting a new project or major feature from only a loose description. Also use to reverse-engineer a spec from an existing codebase before a large change. Produces one Markdown file meant to live in the repo and be loaded as project context.
 ---
 
 # Spec Architect

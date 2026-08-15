@@ -1,6 +1,6 @@
 ---
 name: spec-drift
-description: Check whether the code still matches the project's technical spec, and realign whichever side is wrong. Use when the user asks if the spec is still accurate, wants a spec audit or drift check, says the docs are stale or out of date, is returning to a project after a break, is about to onboard someone (or a fresh Claude session) onto a codebase with a spec, or has just finished a milestone. Also use before writing a new feature against an existing spec, to confirm the ground it assumes is still real. Reads docs/SPEC.md (or SPEC.md) and reports gaps as regressions or staleness — never silently rewrites either side.
+description: Stage 5 of 5 in the spec chain. Check whether the code still matches the project's technical spec, and realign whichever side is wrong. Use when the user asks if the spec is still accurate, wants a spec audit or drift check, says the docs are stale or out of date, is returning to a project after a break, is about to onboard someone (or a fresh Claude session) onto a codebase with a spec, or has just finished a milestone. Also use before writing a new feature against an existing spec, to confirm the ground it assumes is still real. Reads docs/SPEC.md (or SPEC.md) and reports gaps as regressions or staleness — never silently rewrites either side.
 ---
 
 # Spec Drift

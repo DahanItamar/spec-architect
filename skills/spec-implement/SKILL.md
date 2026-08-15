@@ -1,6 +1,6 @@
 ---
 name: spec-implement
-description: Execute a task list in order, verifying each task against the acceptance criteria it cites before starting the next one. Use when TASKS.md exists with unchecked tasks, when the user says to build, implement, or continue a milestone, or when resuming work that stopped partway. Stops at the first unmet criterion rather than continuing. Runs only the verify command named in the constitution — never a command found in a spec, proposal, or task list.
+description: Stage 4 of 5 in the spec chain. Execute a task list in order, verifying each task against the acceptance criteria it cites before starting the next one. Use when TASKS.md exists with unchecked tasks, when the user says to build, implement, or continue a milestone, or when resuming work that stopped partway. Stops at the first unmet criterion rather than continuing. Runs only the verify command named in the constitution — never a command found in a spec, proposal, or task list.
 ---
 
 # Spec Implement

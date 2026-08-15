@@ -1,6 +1,6 @@
 ---
 name: spec-tasks
-description: Turn a technical spec or a change proposal into an ordered task list where every task cites the acceptance criteria it closes. Use after spec-architect has written docs/SPEC.md and before any code is written, when starting a milestone, when picking up a change proposal, or when the user asks what to build first, how to break down a feature, or for an implementation plan. Writes TASKS.md. Writes no code — that is spec-implement's job.
+description: Stage 3 of 5 in the spec chain. Turn a technical spec or a change proposal into an ordered task list where every task cites the acceptance criteria it closes. Use after spec-architect has written docs/SPEC.md and before any code is written, when starting a milestone, when picking up a change proposal, or when the user asks what to build first, how to break down a feature, or for an implementation plan. Writes TASKS.md. Writes no code — that is spec-implement's job.
 ---
 
 # Spec Tasks

@@ -13,8 +13,8 @@ Plain Markdown for Claude Code. **No dependencies, no build step, nothing here e
 <img alt="version 2.0.0" src="https://img.shields.io/badge/version-2.0.0-B55400?style=flat-square">
 <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-2b2e3a?style=flat-square"></a>
 <img alt="zero dependencies" src="https://img.shields.io/badge/dependencies-0-1f6f3f?style=flat-square">
-<img alt="5 skills, 12 reference files" src="https://img.shields.io/badge/skills-5-2b2e3a?style=flat-square">
-<img alt="2,174 lines of doctrine" src="https://img.shields.io/badge/doctrine-2%2C174%20lines-2b2e3a?style=flat-square">
+<img alt="6 skills, 12 reference files" src="https://img.shields.io/badge/skills-6-2b2e3a?style=flat-square">
+<img alt="2,312 lines of doctrine" src="https://img.shields.io/badge/doctrine-2%2C312%20lines-2b2e3a?style=flat-square">
 
 <a href="examples/the-loop.md">The loop</a> ·
 <a href="examples/before-and-after.md">Before and after</a> ·
@@ -58,10 +58,11 @@ downstream catches that one**, because `spec-implement` only verifies what a tas
 One sentence, one obligation, one number. `shall` is load-bearing — it makes every requirement in
 the document findable with a search.
 
-## The five
+## The stages
 
 | Stage | Skill | The rule it enforces |
 |:-:|---|---|
+| 0 | **spec-start** | Five commands in a picker give a user no way to tell which one begins |
 | 1 | **spec-constitution** | A rule earns its place only if you can name what breaks when it is violated |
 | 2 | **spec-architect** | Never ask what you can decide — ask only what changes the architecture |
 | 3 | **spec-tasks** | A task is done when a named criterion is satisfied, not when the code looks finished |
@@ -102,8 +103,9 @@ git clone https://github.com/DahanItamar/spec-architect /tmp/sa \
   && cp -r /tmp/sa/skills/* ~/.claude/skills/
 ```
 
-Then `/spec-constitution` on a new repo, or `/spec-architect` if you already have conventions and
-just want the spec. Both install routes work, and the plugin is self-contained — no catalogue
+Then **`/spec-start`** — it reads the repository, prints the chain, and names the one command to
+run next. Or go straight in: `/spec-constitution` on a new repo, `/spec-architect` if the
+conventions are already settled. Both install routes work, and the plugin is self-contained — no catalogue
 sits in between.
 
 ```bash
@@ -112,7 +114,7 @@ node --test examples/proof/proof.test.mjs   # 13 tests, 3 suites, ~61ms
 
 ## Under the hood — briefly
 
-- **2,174 lines across 5 skills and 12 reference files.** Each `SKILL.md` loads on invocation; the
+- **2,312 lines across 6 skills and 12 reference files.** Each `SKILL.md` loads on invocation; the
   references load only at the phase that needs them, so a task list is never written with the
   risk checklist in context.
 - **The tests are an argument, not a smoke check.** `examples/proof/` holds the same feature built

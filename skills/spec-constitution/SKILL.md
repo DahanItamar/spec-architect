@@ -1,6 +1,6 @@
 ---
 name: spec-constitution
-description: Write the repository's constitution — the principles, conventions, and verification command that every later spec, task list, and implementation inherits. Use at the start of a project, before running spec-architect on a new repo, when conventions live only in reviewers' heads, when a team keeps re-litigating the same review comments, or when an agent keeps producing code that doesn't match the house style. Writes docs/CONSTITUTION.md. Does not describe features — that is spec-architect's job.
+description: Stage 1 of 5 in the spec chain. Write the repository's constitution — the principles, conventions, and verification command that every later spec, task list, and implementation inherits. Use at the start of a project, before running spec-architect on a new repo, when conventions live only in reviewers' heads, when a team keeps re-litigating the same review comments, or when an agent keeps producing code that doesn't match the house style. Writes docs/CONSTITUTION.md. Does not describe features — that is spec-architect's job.
 ---
 
 # Spec Constitution
