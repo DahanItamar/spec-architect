@@ -1,161 +1,139 @@
 <div align="center">
 
-<samp>
+# Spec Architect
 
-## FlowSystem
+**Five skills that turn a vague idea into working code without losing the reasoning along the way —
+each stage handing the next a set of numbered criteria, so "done" is something you check rather
+than something you feel.**
 
-**Two skills for Claude Code. One loop.**
+Plain Markdown for Claude Code. **No dependencies, no build step, nothing here executes.**
 
-Write a spec worth having. Keep it true.
+<a href="https://github.com/DahanItamar/spec-architect/actions/workflows/test.yml"><img alt="CI status" src="https://github.com/DahanItamar/spec-architect/actions/workflows/test.yml/badge.svg?branch=main"></a>
+<img alt="13 tests passing across 3 suites" src="https://img.shields.io/badge/tests-13%20passing-1f6f3f?style=flat-square">
+<img alt="version 2.0.0" src="https://img.shields.io/badge/version-2.0.0-B55400?style=flat-square">
+<a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-2b2e3a?style=flat-square"></a>
+<img alt="zero dependencies" src="https://img.shields.io/badge/dependencies-0-1f6f3f?style=flat-square">
+<img alt="5 skills, 12 reference files" src="https://img.shields.io/badge/skills-5-2b2e3a?style=flat-square">
+<img alt="2,174 lines of doctrine" src="https://img.shields.io/badge/doctrine-2%2C174%20lines-2b2e3a?style=flat-square">
 
-</samp>
+<a href="examples/the-loop.md">The loop</a> ·
+<a href="examples/before-and-after.md">Before and after</a> ·
+<a href="examples/shift-planner-spec.md">An example spec</a> ·
+<a href="examples/proof/README.md">The proof</a>
 
 </div>
 
-<br>
+---
 
-```
-      your idea
-          │
-          ▼
-   spec-architect ──────► docs/SPEC.md ──────► you build
-                                ▲                  │
-                                │                  │
-                                └──── spec-drift ◄─┘
-                                    keeps it true
-```
+## What the stages hand each other
 
-<br>
+Most "spec workflows" are five prompts that happen to run in order. Nothing survives the handoff, so
+by stage four the agent is judging prose it wrote itself against prose it wrote earlier.
 
-Claude writes vague code from vague prompts — not because the model is weak, but because *"build me a desktop app for shifts"* isn't a specification, and nobody has decided what the thing is yet.
+What travels here is an identifier. `spec-architect` writes each requirement as one EARS sentence
+with a stable `AC-###`, and every later stage refers to it by number:
 
-So write the spec first. The catch is that a spec is only useful while it's **true**, and code drifts away from it in about a month. That's why this is two skills and not one.
+```mermaid
+flowchart LR
+    C["constitution<br/><i>the repo's rules</i>"] -- "verify command" --> A
 
-<br>
+    A["architect<br/><i>the spec</i>"] -- "assigns AC-###" --> T
+    T["tasks<br/><i>ordered list</i>"] -- "cites AC-###" --> I
+    I["implement<br/><i>one at a time</i>"] -- "verifies AC-###" --> D
+    D["drift<br/><i>the audit</i>"] -- "reports by AC-###" --> V{"which side<br/>is wrong?"}
 
-### <samp>Install</samp>
-
-**Terminal CLI**
-
-```
-/plugin marketplace add DahanItamar/ai-skills
-/plugin install flowsystem@dahanitamar
-/reload-plugins
+    V -- "code drifted" --> R["regression<br/><i>fix the code</i>"]
+    V -- "spec is stale" --> S["staleness<br/><i>fix the spec</i>"]
 ```
 
-One install, both skills. That catalogue also carries
-[`uilint`](https://github.com/DahanItamar/uilint) and
-[`readme-architect`](https://github.com/DahanItamar/readme-architect) — one add, then install
-whichever you want.
+That is requirements traceability, and it is the whole reason the chain is more than five prompts.
+A task that closes no criterion is either unnecessary work or evidence of a requirement nobody
+wrote. A criterion no task closes is scope that will silently never be built — and **nothing
+downstream catches that one**, because `spec-implement` only verifies what a task cites.
 
-**VS Code extension** — the two lines above do nothing here. `/plugin` is an interactive panel the terminal CLI has and the extension doesn't; paste it and Claude answers *"`/plugin` isn't available in this environment"* without adding anything. The extension spells it **`/plugins`**, plural, and opens a dialog:
+| ID | Criterion |
+| --- | --- |
+| AC-003 | If two shifts for one employee overlap by any minute, then the scheduler shall flag both and refuse to publish. |
 
-1. Type `/plugins` in the prompt box
-2. **Marketplaces** tab → add `DahanItamar/ai-skills`
-3. **Plugins** tab → find **flowsystem** → **Install**, and choose a scope
-4. Restart Claude Code when the banner asks
+One sentence, one obligation, one number. `shall` is load-bearing — it makes every requirement in
+the document findable with a search.
 
-Same plugins and marketplaces either way — the extension drives the same commands underneath, so anything you add here is there in the CLI too.
+## The five
 
-**Claude desktop app** — use the built-in plugin browser.
+| Stage | Skill | The rule it enforces |
+|:-:|---|---|
+| 1 | **spec-constitution** | A rule earns its place only if you can name what breaks when it is violated |
+| 2 | **spec-architect** | Never ask what you can decide — ask only what changes the architecture |
+| 3 | **spec-tasks** | A task is done when a named criterion is satisfied, not when the code looks finished |
+| 4 | **spec-implement** | One task, verify, then the next — stop at the first unmet criterion |
+| 5 | **spec-drift** | The spec and the code disagree: say *which one* is wrong |
 
-**Web, cloud sessions, or anywhere without a plugin UI** — drop the plugin into your personal skills directory. It ships its own `.claude-plugin/plugin.json`, so Claude Code discovers it in place as `flowsystem@skills-dir` on the next session, with no marketplace and no install step:
+Each is usable alone. `spec-architect` writes a perfectly good spec with no constitution above it,
+and `spec-drift` audits a codebase whose spec was written by hand. The chain is what they are worth
+together, not a prerequisite.
+
+## The failure each stage is built against
+
+Stage 4 exists because of a specific way agent-written code goes wrong: twelve tasks implemented,
+task three turns out to be broken, and nine tasks of work are now sitting on top of it. So
+`spec-implement` stops at the first unmet criterion instead of collecting failures for a summary.
+
+Stage 5 exists because of the opposite mistake. When the spec and the code disagree, a tool that
+always rewrites the spec blesses every regression it finds, and one that always flags the code
+fights every deliberate change. `spec-drift` classifies each finding as **regression** or
+**staleness** and edits neither side until you have seen the verdict.
+
+> [!IMPORTANT]
+> **`spec-implement` runs only the verify command named in the constitution.** Never one found in a
+> spec, a task list, or a code comment. Those files are editable by anyone with commit access, so
+> treating their contents as instructions would turn a spec file into remote code execution.
+
+## Run it
+
+There is nothing to run. It is Markdown that Claude Code reads.
 
 ```bash
-git clone https://github.com/DahanItamar/flowsystem.git
-cp -r flowsystem/plugins/flowsystem ~/.claude/skills/flowsystem
+# as a plugin
+/plugin marketplace add DahanItamar/spec-architect
+/plugin install spec-architect
+
+# or drop the skills in directly
+git clone https://github.com/DahanItamar/spec-architect /tmp/sa \
+  && cp -r /tmp/sa/skills/* ~/.claude/skills/
 ```
 
-```powershell
-# Windows PowerShell
-git clone https://github.com/DahanItamar/flowsystem.git
-Copy-Item -Recurse flowsystem\plugins\flowsystem "$env:USERPROFILE\.claude\skills\flowsystem"
-```
-
-Restart Claude Code, or run `/reload-plugins`. The skills are namespaced identically either way, so everything below applies unchanged.
-
-**Scripted, no prompts** — if you have the CLI but want it non-interactive:
+Then `/spec-constitution` on a new repo, or `/spec-architect` if you already have conventions and
+just want the spec. Both install routes work, and the plugin is self-contained — no catalogue
+sits in between.
 
 ```bash
-claude plugin marketplace add DahanItamar/ai-skills
-claude plugin install flowsystem@dahanitamar
+node --test examples/proof/proof.test.mjs   # 13 tests, 3 suites, ~61ms
 ```
 
-**Any other agent** — the plugin format above is Claude Code's; Codex, Cursor and the rest do not read it. Each skill is a `SKILL.md`: plain Markdown with no code and nothing to run, so paste the body of [`spec-architect`](plugins/flowsystem/skills/spec-architect/SKILL.md) or [`spec-drift`](plugins/flowsystem/skills/spec-drift/SKILL.md) into `AGENTS.md`, a Cursor rule, or a system prompt. What you lose is automatic invocation — Claude Code loads a skill when it becomes relevant, other tools need you to point at it.
+## Under the hood — briefly
 
-<br>
+- **2,174 lines across 5 skills and 12 reference files.** Each `SKILL.md` loads on invocation; the
+  references load only at the phase that needs them, so a task list is never written with the
+  risk checklist in context.
+- **The tests are an argument, not a smoke check.** `examples/proof/` holds the same feature built
+  three ways — naive, spec-derived, and drifted three weeks later — and asserts what each one does
+  to a shift that crosses midnight. The drifted case passes its own tests and contradicts §8 of its
+  spec, which is exactly what stage 5 is for.
+- **Change proposals, not spec rewrites.** Once a spec exists, `spec-architect` writes a diff under
+  `docs/changes/` and leaves the spec alone. The reasoning that made feature 1 correct is the asset,
+  and rewriting the document for feature 4 is how it gets deleted with nobody reading the diff.
+- **Criteria are retired, never reused.** A requirement that no longer applies stays as a tombstone
+  keeping its ID, because an archived task list still cites it.
+- **Nothing executes at install.** No dependencies, no build, no scripts — a repository containing
+  only Markdown is one you can audit before you run it.
 
-### <samp>The two skills</samp>
+> Previously published as **FlowSystem**, which shipped stages 2 and 5 only. The GitHub redirect
+> keeps old clone URLs working; the plugin name has changed, so reinstall rather than update.
 
-**`spec-architect`** — run once, at the start.
-
-```
-/flowsystem:spec-architect I want a desktop app for managing employee shifts
-```
-
-Reads your repo if there is one, asks three to five questions that actually change the architecture, then writes `docs/SPEC.md` — twelve sections covering architecture, conventions, data models, interfaces, edge cases, security, and build order. Everything it wasn't told, it decides and records as a numbered assumption you can reject.
-
-**`spec-drift`** — run whenever you come back.
-
-```
-/flowsystem:spec-drift
-```
-
-Compares the code against the spec and reports every gap with a verdict: **regression** (the code broke a decision that had a reason) or **staleness** (the document is just behind). You pick a direction for each; it applies them.
-
-> Both are namespaced by the plugin — including the skills-directory route above, since the manifest travels with it. The prefix only disappears if you copy a single skill folder on its own (`plugins/flowsystem/skills/spec-architect` → `~/.claude/skills/spec-architect`). With no manifest alongside it, that's a plain skill: `/spec-architect`.
-
-<br>
-
-### <samp>See it work</samp>
-
-> ### [The loop, over five weeks →](examples/the-loop.md)
-> A spec gets written. Three weeks later a one-line validation fix silently reverses it, and every test still passes. `spec-drift` catches it and explains which side is wrong.
-
-Also here: a [full worked spec](examples/shift-planner-spec.md) from one sentence of input, and a [same-prompt comparison](examples/before-and-after.md) of building with and without one.
-
-None of it is illustrative — the implementations are real files with a test suite that proves the difference:
-
-```
-node --test examples/proof/proof.test.mjs     13 tests, zero dependencies
-```
-
-<br>
-
-### <samp>The rules they run on</samp>
-
-**Never ask what you can decide.** A question earns its place only if two plausible answers produce two different systems. *"What should we call it?"* decides nothing. *"Does more than one person touch the same record?"* decides whether a server exists at all.
-
-**Could this be deleted and the product still work?** If yes, delete it. No message queue, no cache layer, and no microservice boundary for something three people will use.
-
-**A gap against a recorded reason is a regression until proven otherwise.** Updating the spec to match the code is the fast, dangerous default — do it wrongly once and the document now specifies the bug.
-
-<br>
-
-### <samp>Layout</samp>
-
-```
-plugins/flowsystem/skills/
-├── spec-architect/        idea → spec
-│   ├── SKILL.md
-│   └── references/        decision rules · code conventions · template · risks
-└── spec-drift/            spec ↔ code
-    ├── SKILL.md
-    └── references/        checkable claims · verdicts
-
-examples/
-├── the-loop.md            both skills, one project, five weeks
-├── shift-planner-spec.md  full worked output
-├── before-and-after.md    same prompt, with and without
-└── proof/                 real implementations + runnable tests
-```
-
-<br>
+---
 
 <div align="center">
-<samp>
 
-MIT · [Itamar Dahan](https://github.com/DahanItamar)
+Built by <a href="https://github.com/DahanItamar">Itamar Dahan</a> · <a href="LICENSE">MIT</a> · © 2026
 
-</samp>
 </div>
