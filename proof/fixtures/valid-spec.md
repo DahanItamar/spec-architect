@@ -74,7 +74,7 @@ interface Bookmark {
 ## 10. Build Order
 
 **M1 — Capture and list**
-_Demo: add a URL, restart the shell, list it back._
+*Demo: add a URL, restart the shell, list it back.*
 
 - [ ] T-01 Create the JSON store with load and save — closes AC-001 — files: src/store.js
 - [ ] T-02 Deduplicate on add — closes AC-002 — files: src/store.js — depends: T-01

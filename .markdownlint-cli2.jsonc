@@ -4,7 +4,17 @@
     "MD013": false, // line length — prose wraps at the author's discretion
     "MD024": false, // duplicate headings — "### Components" recurs per section by design
     "MD033": false, // inline HTML — used sparingly in tables
-    "MD041": false // first line need not be a heading; SKILL.md opens with frontmatter
+    "MD041": false, // first line need not be a heading; SKILL.md opens with frontmatter
+
+    // This repo's fenced blocks are mostly ASCII diagrams, directory trees, and
+    // terminal transcripts. None of those is a language, and tagging them `text`
+    // labels without informing.
+    "MD040": false,
+
+    // `**Relationships**` and `**Constraints**` are labels inside §5 of the spec
+    // template, not section headings. Promoting them to headings would put them
+    // in the document outline, where they don't belong.
+    "MD036": false
   },
   "globs": ["**/*.md", "!node_modules"]
 }

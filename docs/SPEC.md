@@ -395,6 +395,7 @@ On failure:      criterion ID not found → the task is invalid; spec-implement 
 
 **M1 — Verifiable specs**
 *Demo: run `spec-architect` on a real idea; get a spec whose §2.1 lists `AC-001…AC-0NN` in EARS. Run v1's `spec-drift` against it — it is already sharper, with no changes to that skill.*
+
 - [ ] `skills/spec-constitution/SKILL.md` + `references/principles.md`
 - [ ] `spec-architect`: add §2.1 to `references/spec-template.md`; add `references/acceptance-criteria.md` (the five EARS patterns, with good/bad examples)
 - [ ] `spec-architect`: §4 becomes a constitution pointer when one exists (AC-014), inline fallback when not (AC-015)
@@ -402,6 +403,7 @@ On failure:      criterion ID not found → the task is invalid; spec-implement 
 
 **M2 — Close the loop**
 *Demo: idea → spec → tasks → working code, with every task naming the criteria it closed. This is the hole in v1, shut.*
+
 - [ ] `skills/spec-tasks/` — task list format, ordering rules, `dependsOn` validation, v1 fallback (AC-006)
 - [ ] `skills/spec-implement/` — per-task verify loop, stop-on-first-failure (AC-008), resumability via checkboxes
 - [ ] `spec-implement`: verify command sourced only from the constitution (AC-017)
@@ -409,6 +411,7 @@ On failure:      criterion ID not found → the task is invalid; spec-implement 
 
 **M3 — Deltas**
 *Demo: on a project that already shipped feature 1, add feature 2 without touching feature 1's reasoning.*
+
 - [ ] `spec-architect` delta mode: detect existing `SPEC.md`, write `PROPOSAL.md` (AC-003)
 - [ ] `docs/changes/` layout, ordinals, `archive/`
 - [ ] `spec-drift`: merge shipped proposals, append to `mergedChanges`, archive (AC-010)
@@ -417,6 +420,7 @@ On failure:      criterion ID not found → the task is invalid; spec-implement 
 
 **M4 — Agent-neutral**
 *Demo: the same five stages run end to end in Cursor and in a plain `AGENTS.md` agent.*
+
 - [ ] `adapters/AGENTS.md` — five stage names, when to use each, pointers into `skills/`
 - [ ] `adapters/cursor/*.mdc`
 - [ ] Per-skill fallback wording for hosts with no question tool (AC-011)
@@ -424,6 +428,7 @@ On failure:      criterion ID not found → the task is invalid; spec-implement 
 
 **M5 — Ship**
 *Demo: a stranger installs v2 and runs the pipeline from the README alone.*
+
 - [ ] Rewrite `README.md` for five stages; document v1 → v2 migration
 - [ ] Update `examples/the-loop.md`; add a worked delta example
 - [ ] Plugin manifest points at `skills/`; verify all three install paths

@@ -30,7 +30,7 @@ Ten minutes. Never touched again except when a rule genuinely changes.
 
 > **Does more than one person edit the same week?** → *No, one manager*
 > → No server. No auth. Local SQLite. Roughly a third of the scope disappears.
-
+>
 > **Do shifts ever cross midnight?** → *Yes, the kitchen closes at 2am*
 > → This one is why the spec is worth writing.
 

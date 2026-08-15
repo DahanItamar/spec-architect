@@ -36,7 +36,7 @@ docs/changes/
 
 ## The document
 
-```markdown
+````markdown
 # 0004 — Shift templates
 
 > Status: proposed · <date> · Against spec version 2.0
@@ -89,7 +89,7 @@ failure now arrives through templates and needs the reporting behavior AC-042 st
 - Milestones affected: M4
 - Criteria added: 2 · retired: 1
 - No change to §9 Security
-```
+````
 
 ---
 

@@ -59,7 +59,7 @@ From the user's description alone, silently determine:
 
 Most of this is inferrable from a two-sentence description. Infer it. Only what stays genuinely ambiguous becomes a question.
 
-### Phase 2 — One round of questions. Two at the absolute most.
+### Phase 2 — One round of questions, two at the absolute most
 
 Use `AskUserQuestion` where the host agent provides it — batch **3–5 questions in a single call** with concrete options, not open prompts. Where the tool does not exist, ask them as one compact numbered list in a single message and wait for one reply.
 
