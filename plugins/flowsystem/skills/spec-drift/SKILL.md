@@ -5,6 +5,8 @@ description: Check whether the code still matches the project's technical spec, 
 
 # Spec Drift
 
+**Stage 5 of 5.** `constitution → spec → tasks → implement → drift`
+
 A spec is only worth having if it's true. The moment the code and the document disagree, the document stops being a reference and becomes a liability — because people still trust it.
 
 Your job is to find every place they disagree and, for each one, answer the only question that matters: **which side is wrong?**
@@ -29,6 +31,8 @@ A gap against a section that merely *describes* — a field that got added, an e
 
 Look for `docs/SPEC.md`, then `SPEC.md`, then any `*.spec.md` in `docs/`. If there's more than one, ask which.
 
+Then list `docs/changes/` for proposals that are not archived. Each one is either **pending** (tasks unfinished — its criteria are not yet promises the code must keep) or **shipped** (every task ticked — it is ready to merge in Phase 6). Read `docs/CONSTITUTION.md` too, if present; §4 claims are checked against it rather than against the spec.
+
 If there is none, stop and say so — offer `spec-architect` to write one. Do not invent a spec to check against; a reconstructed spec compared to the code it was reconstructed from finds nothing.
 
 Note the spec's `Status:` line if it has one. A spec last touched six months and forty commits ago will drift heavily, and the report should open by saying so rather than dumping ninety findings.
@@ -43,6 +47,7 @@ Roughly, the checkable surface is:
 
 | Section | What can actually be verified |
 | --- | --- |
+| §2.1 Criteria | **Each active `AC-###` holds in the code.** The largest and sharpest surface — these are assertions, not description |
 | §3 Architecture | Named components exist; forbidden dependencies absent |
 | §4 Conventions | Directory layout, dependency direction, naming, size limits |
 | §5 Data Models | Every field, type, nullability, constraint, index |
@@ -86,7 +91,7 @@ Show the whole picture first. Regressions at the top, then staleness, then undec
 
 Every entry carries: the spec claim, the file and line, the verdict, and the concrete fix for each direction. Never present a gap without a recommendation — an unranked list of forty differences is the same as no report.
 
-Then let the user choose. Batch the decisions into one `AskUserQuestion` call where the tool is available; don't walk through them one at a time.
+Then let the user choose. Batch the decisions into one `AskUserQuestion` call where the host agent provides it; where it does not, present them as one numbered list in a single message and wait for one reply. Never walk through them one at a time.
 
 ### Phase 5 — Apply
 
@@ -97,6 +102,20 @@ Fix only what the user accepted.
 - **New things with no home:** a component or endpoint the spec never mentioned gets added to the right section, not appended to the end.
 
 Finally, bump the spec's version or date line if it has one, and report what you changed on each side.
+
+### Phase 6 — Merge shipped changes
+
+A change proposal whose tasks are all ticked has earned its way into the spec. Read `references/merge.md`, then for each shipped proposal:
+
+1. **Check for conflicts.** If another unarchived proposal edits a section this one edits, merge neither. Report the overlap and let the user sequence them — resolving it yourself is a design decision wearing a merge's clothing.
+2. **Apply each section edit** in place, in the spec's own voice. Never append a "Changes" section at the end; a component belongs in §3, a field in §5.
+3. **Promote the motivation** into §3 Decisions if the change made an architectural choice. This is the reason a future reader needs, and the proposal is about to be archived.
+4. **Add and retire criteria.** New ones keep their IDs. Retired ones become tombstones in §2.1 — struck through, with the ordinal that retired them. Never renumber; every archived task list still cites these.
+5. **Move the directory** to `docs/changes/archive/` and record the ordinal in the spec's merged-changes line.
+
+**Never merge a pending proposal.** Its criteria describe intent, not obligation, and checking code against them produces findings for work nobody has started.
+
+If the spec has no §2.1 at all — a v1 spec — offer a one-time backfill: rewrite the assertions already present in §2, §7, §8, and §9 as EARS criteria without inventing behavior the spec never claimed. Offer it once, do it only if accepted, and never fold it into an unrelated drift report.
 
 ---
 
@@ -110,7 +129,8 @@ Match the report to the drift. A spec checked weekly should usually come back cl
 
 - `references/checkable-claims.md` — per section: what is verifiable, and how to verify it
 - `references/verdicts.md` — classifying each gap, and how to write the fix on either side
+- `references/merge.md` — folding a shipped proposal into the spec without losing a reason
 
 ## Related
 
-`spec-architect` writes the spec this skill checks. If the project has no spec yet, that's the one to run first.
+`spec-architect` writes the spec this skill checks, and the change proposals it merges. `spec-tasks` and `spec-implement` sit between them. If the project has no spec yet, `spec-architect` is the one to run first.

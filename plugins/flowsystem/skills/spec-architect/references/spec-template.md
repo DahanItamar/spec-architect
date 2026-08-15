@@ -31,6 +31,19 @@ on Sunday" beats "streamline workforce management".>
 <This second list is the more valuable one. It is where you park good ideas the user
 didn't ask for: visible, but not committed.>
 
+### 2.1 Acceptance Criteria
+
+<The contract. One EARS sentence per observable behavior, each with a stable ID.
+Read references/acceptance-criteria.md before writing this section — the patterns and
+the ID rules are both load-bearing. Downstream stages cite these IDs; renumbering
+later breaks every citation.>
+
+| ID | Criterion |
+| --- | --- |
+| AC-001 | The <system> shall <response>. |
+| AC-002 | When <trigger>, the <system> shall <response>. |
+| AC-003 | If <condition>, then the <system> shall <response>. |
+
 ## 3. Architecture
 
 ### Overview
@@ -61,8 +74,19 @@ Revisit if: <the specific condition that would change this>
 
 ## 4. Project Layout & Conventions
 
-<From references/code-conventions.md. State only the rules this project will actually
-follow — a convention nobody honors teaches readers the document is decoration.>
+<Two forms. Pick one.
+
+WITH a constitution — this section is a pointer plus only what is specific to this
+work. Never restate a rule docs/CONSTITUTION.md already carries:
+
+    Governed by `docs/CONSTITUTION.md` (layout, dependency direction, naming,
+    size limits, tooling, verify command).
+
+    Specific to this spec:
+    - <new directory this feature introduces, and its rule>
+
+WITHOUT a constitution — write it inline from references/code-conventions.md, using
+the subsections below, and suggest running spec-constitution afterward.>
 
 ### Directory layout
 
@@ -136,23 +160,25 @@ request-response. For CLI: full invocation with flags and exit codes.>
 
 <The two to four paths that define the product. Numbered steps naming the component
 acting at each one. If a flow can't be written as concrete steps, the design has a hole —
-find it now rather than in week three.>
+find it now rather than in week three. Cite the criteria each flow satisfies.>
 
 ### <Flow name>
 
 1. <Actor> <does thing> → <component> <responds>
 2. …
 
+**Satisfies:** AC-00X, AC-00Y
 **Failure branches:** <where this flow can break, and what the user sees>
 
 ## 8. Edge Cases & Failure Modes
 
 <From references/risk-checklist.md — only items that can actually happen here.
-Format: trigger → consequence → handling.>
+Format: trigger → consequence → handling. Most rows here should also appear in §2.1
+as an "If … then …" criterion; cite the ID so the handling is verifiable.>
 
-| Case | Consequence if unhandled | Handling |
-| --- | --- | --- |
-| <trigger> | <what breaks> | <the decision> |
+| Case | Consequence if unhandled | Handling | AC |
+| --- | --- | --- | --- |
+| <trigger> | <what breaks> | <the decision> | AC-0XX |
 
 ## 9. Security & Permissions
 
@@ -170,11 +196,12 @@ Format: trigger → consequence → handling.>
 ## 10. Build Order
 
 <Milestones, each independently demoable. M1 must produce something visible — if the
-first milestone is "set up infrastructure", reorder until it isn't.>
+first milestone is "set up infrastructure", reorder until it isn't. Every task closes
+at least one criterion; every criterion is closed by at least one task.>
 
 **M1 — <name>**
-<What works at the end of this, stated as something you can show someone>
-- [ ] <task>
+*Demo: <what you can show someone at the end of this>*
+- [ ] <task> — closes AC-00X
 
 **M2 — <name>**
 …
@@ -199,10 +226,12 @@ detail, and it should have been decided.>
 
 ## Notes on writing it
 
-**Length follows stakes.** A weekend CLI tool uses sections 1, 3, 4, 5, 10 and nothing more. A multi-tenant product handling payments uses all twelve, with §9 carrying real weight. Padding a small idea into twelve pages is a failure in the same way that one paragraph for a payments system is.
+**Length follows stakes.** A weekend CLI tool uses sections 1, 2.1, 3, 5, 10 and nothing more. A multi-tenant product handling payments uses all twelve, with §9 carrying real weight. Padding a small idea into twelve pages is a failure in the same way that one paragraph for a payments system is.
 
 **Tables over paragraphs** for anything enumerable. Prose is for reasoning; tables are for facts.
 
 **No hedging.** "We should probably consider using…" is not a spec sentence. Decide, state the reason, note what would change your mind.
+
+**§2.1 is the machine-readable part; everything else is the human-readable part.** Both are required. Criteria without §3 Decisions tell a later reader what but never why — and *why* is what stops `spec-drift` from blessing a regression.
 
 **Write for the reader who wasn't in the conversation.** This document exists to be loaded into a fresh context. Nothing in it may depend on something said in chat but not written down.

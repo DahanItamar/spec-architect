@@ -1,8 +1,8 @@
 {
   "name": "flowsystem",
   "displayName": "FlowSystem",
-  "version": "1.1.0",
-  "description": "Spec-first workflow skills for Claude Code. spec-architect turns a rough idea into a Technical Spec precise enough to build from; spec-drift keeps it true as the code changes.",
+  "version": "2.0.0",
+  "description": "The five-stage spec pipeline for Claude Code: constitution sets the repo's rules, architect writes the spec and its acceptance criteria, tasks turns it into an ordered list, implement executes one task at a time verifying each against the criteria it cites, and drift audits the result. Every stage cites the IDs the next one checks.",
   "author": {
     "name": "Itamar Dahan",
     "url": "https://github.com/DahanItamar"
@@ -10,5 +10,5 @@
   "homepage": "https://github.com/DahanItamar/flowsystem",
   "repository": "https://github.com/DahanItamar/flowsystem",
   "license": "MIT",
-  "keywords": ["spec", "prd", "architecture", "system-design", "planning", "data-modeling", "drift", "audit"]
+  "keywords": ["spec", "prd", "architecture", "system-design", "planning", "acceptance-criteria", "tasks", "implementation", "drift", "audit"]
 }
