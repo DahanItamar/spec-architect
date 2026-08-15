@@ -153,7 +153,8 @@ flowsystem/
 ├── adapters/
 │   ├── AGENTS.md              # pointer file. no rule of its own (AC-016)
 │   └── cursor/                # .mdc pointer files
-├── plugins/flowsystem/        # Claude Code plugin manifest. points at ../../skills/
+├── .claude-plugin/            # plugin + marketplace manifests. the repo itself is the plugin,
+│                              # so skills/ is never copied and cannot desynchronise
 ├── examples/                  # worked runs. no rules — examples that teach behavior belong in references/
 ├── proof/                     # node --test suite. asserts artifact shapes, not agent prose
 └── docs/                      # FlowSystem's own spec. dogfood; this file

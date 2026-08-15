@@ -1,0 +1,14 @@
+{
+  "name": "flowsystem",
+  "owner": {
+    "name": "Itamar Dahan",
+    "url": "https://github.com/DahanItamar"
+  },
+  "plugins": [
+    {
+      "name": "flowsystem",
+      "source": "./",
+      "description": "Spec-driven development in five stages: constitution, spec, tasks, implement, drift."
+    }
+  ]
+}

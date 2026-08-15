@@ -1,0 +1,12 @@
+{
+  "name": "flowsystem",
+  "description": "Spec-driven development in five stages: constitution, spec, tasks, implement, drift. Writes specs with EARS acceptance criteria, turns them into cited task lists, verifies each task before the next, and audits code against the spec.",
+  "version": "2.0.0",
+  "author": {
+    "name": "Itamar Dahan",
+    "url": "https://github.com/DahanItamar"
+  },
+  "homepage": "https://github.com/DahanItamar/flowsystem",
+  "license": "MIT",
+  "keywords": ["spec-driven-development", "ears", "planning", "code-review"]
+}
