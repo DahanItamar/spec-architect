@@ -2,117 +2,79 @@
 
 # Spec Architect
 
-**Six skills that turn a vague idea into working code without losing the reasoning along the way —
-each stage handing the next a set of numbered criteria, so "done" is something you check rather
-than something you feel.**
+**Six Claude Code skills that carry one identifier from a rough idea to shipped code — every
+requirement gets a number in the spec, and every task, verification, audit and refactoring after it
+cites that number.**
 
-Plain Markdown for Claude Code. **No dependencies, no build step, nothing here executes.**
+Plain Markdown, read by Claude Code.
+**No `package.json`, no dependencies, no build step, nothing that executes at install.**
 
-<a href="https://github.com/DahanItamar/spec-architect/actions/workflows/test.yml"><img alt="CI status" src="https://github.com/DahanItamar/spec-architect/actions/workflows/test.yml/badge.svg?branch=main"></a>
+<a href="https://github.com/DahanItamar/spec-architect/actions/workflows/test.yml"><img alt="CI status on the main branch" src="https://github.com/DahanItamar/spec-architect/actions/workflows/test.yml/badge.svg?branch=main"></a>
 <img alt="17 tests passing across 4 suites" src="https://img.shields.io/badge/tests-17%20passing-1f6f3f?style=flat-square">
-<img alt="version 3.0.0" src="https://img.shields.io/badge/version-3.0.0-B55400?style=flat-square">
-<a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-2b2e3a?style=flat-square"></a>
 <img alt="zero dependencies" src="https://img.shields.io/badge/dependencies-0-1f6f3f?style=flat-square">
-<img alt="7 skills, 16 reference files" src="https://img.shields.io/badge/skills-7-2b2e3a?style=flat-square">
-<img alt="2,962 lines of doctrine" src="https://img.shields.io/badge/doctrine-2%2C962%20lines-2b2e3a?style=flat-square">
+<img alt="version 3.0.0" src="https://img.shields.io/badge/version-3.0.0-B55400?style=flat-square">
+<a href="LICENSE"><img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-2b2e3a?style=flat-square"></a>
 
-<a href="examples/the-loop.md">The loop</a> ·
-<a href="examples/before-and-after.md">Before and after</a> ·
-<a href="examples/shift-planner-spec.md">An example spec</a> ·
+<a href="examples/the-loop.md">The walkthrough</a> ·
 <a href="examples/proof/README.md">The proof</a>
 
 </div>
 
 ---
 
-## What the stages hand each other
+## The identifier that survives the handoff
 
-Most "spec workflows" are a handful of prompts that happen to run in order. Nothing survives the
-handoff, so by stage four the agent is judging prose it wrote itself against prose it wrote earlier.
+Most spec workflows are a handful of prompts that run in order. Nothing travels between them, so by
+the fourth prompt the agent is judging prose it wrote itself against prose it wrote earlier.
 
-What travels here is an identifier. `spec-architect` writes each requirement as one EARS sentence
-with a stable `AC-###`, and every later stage refers to it by number:
+What travels here is an identifier. Stage 2 writes each requirement as one EARS sentence with a
+stable `AC-###`, and no later stage may refer to a requirement any other way:
+
+```text
+docs/SPEC.md    AC-003  If two shifts for one employee overlap by any minute, then the
+                        scheduler shall flag both and refuse to publish.
+
+TASKS.md        - [ ] T-04 Detect overlaps on a minute timeline — closes AC-003
+
+REFACTORINGS.md - [ ] R-02 Extract `toRange`, delete the two copies — preserves AC-003
+```
+
+`closes` in stage 3, `preserves` in stage 6 — one word apart, and the whole difference between
+building a feature and restructuring one. A task that closes no criterion is either unnecessary
+work or a requirement nobody wrote down.
 
 ```mermaid
 flowchart LR
-    C["constitution<br/><i>the repo's rules</i>"] -- "verify command" --> A
-
-    A["architect<br/><i>the spec</i>"] -- "assigns AC-###" --> T
-    T["tasks<br/><i>ordered list</i>"] -- "cites AC-###" --> I
-    I["implement<br/><i>one at a time</i>"] -- "verifies AC-###" --> D
-    D["drift<br/><i>the audit</i>"] -- "reports by AC-###" --> V{"which side<br/>is wrong?"}
-
-    V -- "code drifted" --> R["regression<br/><i>fix the code</i>"]
-    V -- "spec is stale" --> S["staleness<br/><i>fix the spec</i>"]
-    V -- "neither — it's<br/>the structure" --> F["refactor<br/><i>preserves AC-###</i>"]
+    C["1 constitution"] -- "verify command" --> A
+    A["2 spec"] -- "assigns AC-###" --> T
+    T["3 tasks"] -- "closes AC-###" --> I
+    I["4 implement"] -- "verifies AC-###" --> D
+    D{"5 drift"} -- "code contradicts<br/>a recorded reason" --> R["regression<br/><i>fix the code</i>"]
+    D -- "nothing forbade it" --> S["staleness<br/><i>fix the spec</i>"]
+    D -- "clean, but expensive<br/>to change" --> F["6 refactor<br/><i>preserves AC-###</i>"]
+    R --> A
+    S --> A
+    F --> A
 ```
 
-That is requirements traceability, and it is the whole reason the chain is more than six prompts
-in a row. A task that closes no criterion is either unnecessary work or evidence of a requirement nobody
-wrote. A criterion no task closes is scope that will silently never be built — and **nothing
-downstream catches that one**, because `spec-implement` only verifies what a task cites.
+| Stage | Command | Writes | The rule it enforces |
+|:-:|---|---|---|
+| 0 | `/spec-start` | nothing | Six commands in a picker give you no way to tell which one begins |
+| 1 | `/spec-constitution` | `docs/CONSTITUTION.md` | A rule earns its place only if you can name what breaks when it is violated |
+| 2 | `/spec-architect` | `docs/SPEC.md` | Never ask what you can decide — ask only what changes the architecture |
+| 3 | `/spec-tasks` | `TASKS.md` | A task is done when a named criterion is satisfied, not when the code looks finished |
+| 4 | `/spec-implement` | code | One task, verify, then the next — stop at the first unmet criterion |
+| 5 | `/spec-drift` | a report | The spec and the code disagree: say *which one* is wrong |
+| 6 | `/spec-refactor` | `docs/REFACTORINGS.md` | Restructure only what blocks scheduled work — and change no criterion doing it |
 
-| ID | Criterion |
-| --- | --- |
-| AC-003 | If two shifts for one employee overlap by any minute, then the scheduler shall flag both and refuse to publish. |
-
-One sentence, one obligation, one number. `shall` is load-bearing — it makes every requirement in
-the document findable with a search.
-
-## The stages
-
-| Stage | Skill | The rule it enforces |
-|:-:|---|---|
-| 0 | **spec-start** | Six commands in a picker give a user no way to tell which one begins |
-| 1 | **spec-constitution** | A rule earns its place only if you can name what breaks when it is violated |
-| 2 | **spec-architect** | Never ask what you can decide — ask only what changes the architecture |
-| 3 | **spec-tasks** | A task is done when a named criterion is satisfied, not when the code looks finished |
-| 4 | **spec-implement** | One task, verify, then the next — stop at the first unmet criterion |
-| 5 | **spec-drift** | The spec and the code disagree: say *which one* is wrong |
-| 6 | **spec-refactor** | Restructure only what blocks work that is actually scheduled — and change no criterion doing it |
-
-Each is usable alone. `spec-architect` writes a perfectly good spec with no constitution above it,
-and `spec-drift` audits a codebase whose spec was written by hand. The chain is what they are worth
-together, not a prerequisite.
-
-## The failure each stage is built against
-
-Stage 4 exists because of a specific way agent-written code goes wrong: twelve tasks implemented,
-task three turns out to be broken, and nine tasks of work are now sitting on top of it. So
-`spec-implement` stops at the first unmet criterion instead of collecting failures for a summary.
-
-Stage 5 exists because of the opposite mistake. When the spec and the code disagree, a tool that
-always rewrites the spec blesses every regression it finds, and one that always flags the code
-fights every deliberate change. `spec-drift` classifies each finding as **regression** or
-**staleness** and edits neither side until you have seen the verdict.
-
-Stage 6 exists because a codebase can say yes to every criterion and still be finished — green
-tests, clean drift report, and the next feature a week of work because the thing it extends has
-one rule kind known in four places. Nothing else in the chain can see that; `spec-implement`
-verifies criteria and `spec-drift` compares documents, and both are right not to have an opinion
-about structure. So the opinion gets its own stage, with a threshold that keeps it honest:
-
-> **A smell is actionable only if it is a Change Preventer for work that is actually scheduled.**
-> Everything else is logged with an ID and left alone.
-
-That threshold is the whole design. Hand an agent the standard
-[refactoring catalogue](https://refactoring.guru/refactoring/smells) with no gate and it will
-restructure a working system for sport. The second rule is what makes the result safe to run on
-code that ships: **a refactoring may not change what the spec says the system does.** If it needs
-an `AC-###` edited, it is not a refactoring — it is a change proposal, and it goes back to stage 2.
-Which turns "behavior is preserved" from a claim in a summary into something checked: verify
-green before, green after, every cited criterion re-read against the new code.
-
-> [!IMPORTANT]
-> **The two stages that run commands — `spec-implement` and `spec-refactor` — run only the verify
-> command named in the constitution.** Never one found in a spec, a task list, a refactoring
-> report, or a code comment. Those files are editable by anyone with commit access, so treating
-> their contents as instructions would turn a spec file into remote code execution. A static-analysis
-> command for stage 6's cleanup gate comes from the same place, or from you, in the session.
+Stages 1 and 6 are optional and every stage runs alone. The last two audit different things: drift
+asks whether the code does what the spec says, refactor asks whether code that already does can
+still be changed cheaply. **A refactoring that needs an `AC-###` reworded is not a refactoring** —
+it goes back to stage 2 as a change proposal.
 
 ## Run it
 
-There is nothing to run. It is Markdown that Claude Code reads.
+Requires **Claude Code**. Nothing is installed, compiled or executed.
 
 ```bash
 # as a plugin
@@ -124,42 +86,71 @@ git clone https://github.com/DahanItamar/spec-architect /tmp/sa \
   && cp -r /tmp/sa/skills/* ~/.claude/skills/
 ```
 
-Then **`/spec-start`** — it reads the repository, prints the chain, and names the one command to
-run next. Or go straight in: `/spec-constitution` on a new repo, `/spec-architect` if the
-conventions are already settled. Both install routes work, and the plugin is self-contained — no catalogue
-sits in between.
+Then run **`/spec-start`**. It reads the repository and names the one command to run next —
+`/spec-constitution` on a new repo, `/spec-architect` if the conventions are settled,
+`/spec-implement` if a task list is sitting there half-ticked.
+
+> [!IMPORTANT]
+> **The two stages that run shell commands — `/spec-implement` and `/spec-refactor` — run only
+> the verify command named in `docs/CONSTITUTION.md`.** Never one found in a spec, a task list, a
+> refactoring report or a code comment. Those files are editable by anyone with commit access, so
+> treating their contents as instructions would turn a Markdown file into remote code execution.
+
+## The proof
+
+The one thing here that executes. No install — CI runs it on Node 22, output below is v24.15.0:
 
 ```bash
-node --test examples/proof/proof.test.mjs   # 17 tests, 4 suites, ~64ms
+node --test examples/proof/proof.test.mjs
 ```
+
+```text
+▶ drifted — the code three weeks after the spec was written
+  ✔ but the night shift can no longer be saved — §8 is contradicted (0.3713ms)
+  ✔ and the rejection is silent: the overlap is simply never detected (0.1212ms)
+▶ smelly — passes every criterion and is still unshippable
+  ✔ behaves exactly like the spec-derived version — spec-drift finds nothing (0.2465ms)
+  ✔ SM-002 Duplicate Code: the same day arithmetic, copied three times (0.0478ms)
+
+ℹ tests 17
+ℹ pass 17
+ℹ fail 0
+ℹ duration_ms 64.4798
+```
+
+Four lines of a 17-test run. The suite builds one shift-conflict feature four ways and asserts what
+each does to a shift that crosses midnight:
+
+| Version | Tests green | Matches the spec | Cheap to extend |
+|---|:-:|:-:|:-:|
+| `naive.mjs` — no spec, shapes chosen by convenience | ✅ | ❌ | ❌ |
+| `spec-derived.mjs` — built against §5 and §8 | ✅ | ✅ | ✅ |
+| `drifted.mjs` — three weeks and one sensible-looking fix later | ✅ | ❌ | ✅ |
+| `smelly.mjs` — six months and four features later | ✅ | ✅ | ❌ |
+
+The last two rows are the argument. `drifted.mjs` passes every test it has and contradicts §8 of
+its own spec, so a night shift silently stops being storable — that is stage 5. `smelly.mjs`
+contradicts nothing, so stage 5 is right to stay silent, and its grid tooltip still reports an
+overnight shift as `-960` minutes, because the same calculation is copied three times and one copy
+diverged — that is stage 6.
 
 ## Under the hood — briefly
 
-- **2,962 lines across 7 skills and 16 reference files.** Each `SKILL.md` loads on invocation; the
-  references load only at the phase that needs them, so a task list is never written with the
-  risk checklist in context.
-- **The tests are an argument, not a smoke check.** `examples/proof/` holds the same feature built
-  four ways — naive, spec-derived, drifted three weeks later, and smelly six months later — and
-  asserts what each one does to a shift that crosses midnight. The drifted case passes its own
-  tests and contradicts §8 of its spec, which is what stage 5 is for. The smelly case contradicts
-  nothing, passes everything, and still costs four edits to extend — which is what stage 6 is for.
-- **Change proposals, not spec rewrites.** Once a spec exists, `spec-architect` writes a diff under
-  `docs/changes/` and leaves the spec alone. The reasoning that made feature 1 correct is the asset,
-  and rewriting the document for feature 4 is how it gets deleted with nobody reading the diff.
-- **Criteria are retired, never reused.** A requirement that no longer applies stays as a tombstone
-  keeping its ID, because an archived task list still cites it. `SM-###` smells work the same way:
-  a smell that gets paid off stays struck through with the refactoring that removed it, so the
-  second time it appears in the same file, the argument for fixing the cause writes itself.
-- **The smell names are the standard catalogue, not a copy of it.** *Shotgun Surgery*, *Feature
-  Envy*, *Primitive Obsession* — Fowler and Beck's vocabulary as organised on
-  [refactoring.guru](https://refactoring.guru/refactoring/smells), used so that a finding names
-  something you can go look up. No prose from it is reproduced here; what stage 6 adds is the
-  threshold for when a name is worth invoking, and the false-positive list for when it isn't.
-- **Nothing executes at install.** No dependencies, no build, no scripts — a repository containing
-  only Markdown is one you can audit before you run it.
-
-> Previously published as **FlowSystem**, which shipped stages 2 and 5 only. The GitHub redirect
-> keeps old clone URLs working; the plugin name has changed, so reinstall rather than update.
+- **2,962 lines across 7 skills and 16 reference files.** Each `SKILL.md` loads on invocation, the
+  largest being 171 lines; references load only at the phase that needs them, so a task list is
+  never written with the risk checklist in context.
+- **Nothing executes at install.** No dependencies, no build, no postinstall, no network calls. The
+  only runnable code is 5 `.mjs` files under `examples/proof/`, importing `node:test`,
+  `node:assert/strict`, `node:fs`, and each other.
+- **Change proposals, not spec rewrites.** Once `docs/SPEC.md` exists, `/spec-architect` writes a
+  diff under `docs/changes/` and leaves the spec alone. The reasoning that made feature 1 correct is
+  the asset; rewriting the document for feature 4 deletes it with nobody reading a diff.
+- **Identifiers are retired, never reused.** A criterion that no longer applies stays as a tombstone
+  keeping its `AC-###`, because an archived task list still cites it. `SM-###` smells work the same
+  way, so a smell that reappears carries the record of being paid off once already.
+- **Smell names are the standard catalogue, not a copy of it.** Fowler and Beck's vocabulary as
+  organised on [refactoring.guru](https://refactoring.guru/refactoring/smells), so a finding names
+  something you can look up. No prose from it is reproduced.
 
 ---
 

@@ -1,15 +1,15 @@
 # The loop
 
-Two skills, one project, over five weeks. This is the whole workflow.
+One project, six months, six stages. This is the whole workflow.
 
 Everything below is backed by files in [`proof/`](proof/) — `node --test examples/proof/proof.test.mjs`, 17 tests, no dependencies.
 
 ---
 
-## Day 1 — `spec-architect`
+## Day 1 — `/spec-architect`
 
 ```
-/flowsystem:spec-architect I want a desktop app for managing employee shifts
+/spec-architect I want a desktop app for managing employee shifts
 ```
 
 Four questions. One of them is *"do shifts ever cross midnight?"* — you answer yes, night shifts are normal.
@@ -24,6 +24,23 @@ It writes [`docs/SPEC.md`](shift-planner-spec.md). Two lines from it matter for 
 ```
 
 That's a decision with a reason attached. It exists because without it, a night shift can't be represented at all.
+
+The same run writes §2.1, where that decision becomes a numbered obligation:
+
+```
+AC-003  If two shifts for one employee overlap by any minute, then the
+        scheduler shall flag both and refuse to publish.
+```
+
+`AC-003` is the identifier every later stage refers to. Nothing else survives the handoff between them.
+
+## Day 2 — `/spec-tasks`, then `/spec-implement`
+
+```
+- [ ] T-04 Detect overlaps on a continuous minute timeline — closes AC-003 — files: src/scheduler.js
+```
+
+`spec-implement` reads the criterion verbatim before writing the task, runs the constitution's verify command after, and stops at the first one that doesn't hold. Twelve tasks built on a broken task three is the failure it exists to prevent.
 
 ## Weeks 1–3 — you build
 
@@ -49,7 +66,7 @@ Nobody re-read §8. It's four pages away, and nothing in this task pointed at it
 
 **What actually broke:** the manager types a 22:00 → 06:00 shift, gets a validation error on the form, shortens it to 22:00–23:59, and moves on. No warning fires. The overlap with the next morning's shift is never detected — because the night shift was never stored.
 
-Same silence as having no spec at all. Five weeks later.
+Same silence as having no spec at all. Three weeks later.
 
 > Asserted in [`proof.test.mjs`](proof/proof.test.mjs):
 > ```
@@ -58,10 +75,10 @@ Same silence as having no spec at all. Five weeks later.
 > ✔ and the rejection is silent: the overlap is simply never detected
 > ```
 
-## Day 24 — `spec-drift`
+## Day 24 — `/spec-drift`
 
 ```
-/flowsystem:spec-drift
+/spec-drift
 ```
 
 It reads the spec, reads the code, and compares the claims that are actually checkable:
@@ -106,19 +123,57 @@ So the rule is:
 
 ---
 
+## Month 6 — `/spec-refactor`
+
+Four features later, drift comes back **clean**. Every criterion holds, the overnight case works, nothing contradicts the spec. And adding the next rule — a minimum rest period between shifts — is four days of work.
+
+```
+/spec-refactor
+```
+
+```
+SM-004  Shotgun Surgery — one conflict kind is known in four places
+        src/scheduler.js:48, src/export/csv.js:64, src/ui/grid.jsx:99, src/ui/grid.jsx:104
+        Blocks: M3 "rest-period rules" (TASKS.md T-04..T-07)
+
+SM-002  Duplicate Code — the same day arithmetic, copied three times,
+        and the third copy has already diverged
+        src/scheduler.js:26, src/export/csv.js:59, src/ui/grid.jsx:79
+
+- [ ] R-01 Extract the conflict rules into a rule set — removes SM-004 — preserves AC-003 — kind: judgment
+- [ ] R-02 Extract `toRange` and delete the two copies — removes SM-002 — preserves AC-003 — kind: mechanical
+```
+
+Both lines say **preserves**, not **closes**. That is the difference between this stage and stage 3: a refactoring that needs `AC-003` reworded is not a refactoring, it is a change proposal, and it goes back to `/spec-architect`.
+
+> Asserted in [`proof.test.mjs`](proof/proof.test.mjs) against [`smelly.mjs`](proof/smelly.mjs):
+> ```
+> ✔ behaves exactly like the spec-derived version — spec-drift finds nothing
+> ✔ SM-001 Shotgun Surgery: one rule kind is known in four places
+> ✔ SM-002 Duplicate Code: the same day arithmetic, copied three times
+> ✔ and the copies have already diverged, in the one path no criterion covers
+> ```
+
+The divergence is in the grid tooltip, which no criterion mentions — so an overnight shift displays as `-960` minutes, every test stays green, and stage 5 is right to say nothing. Correctness and changeability are different properties.
+
+---
+
 ## The loop
 
-```
-      your idea
-          │
-          ▼
-   spec-architect ──────► docs/SPEC.md ──────► you build
-                                ▲                  │
-                                │                  │
-                                └──── spec-drift ◄─┘
-                                    keeps it true
+```mermaid
+flowchart LR
+    I["your idea"] --> A["/spec-architect<br/><i>docs/SPEC.md</i>"]
+    A -- "AC-###" --> T["/spec-tasks<br/><i>TASKS.md</i>"]
+    T --> M["/spec-implement<br/><i>code</i>"]
+    M --> D{"/spec-drift"}
+    D -- "code contradicts a reason" --> R["regression<br/><i>fix the code</i>"]
+    D -- "nothing forbade it" --> S["staleness<br/><i>fix the spec</i>"]
+    D -- "clean, but expensive<br/>to change" --> F["/spec-refactor<br/><i>preserves AC-###</i>"]
+    R --> A
+    S --> A
+    F --> A
 ```
 
-`spec-architect` runs once, at the start. `spec-drift` runs whenever you come back to the project — after a milestone, before a new feature, or when you've been away long enough to not trust the document.
+`spec-architect` runs once at the start, then in delta mode for every change after — writing a proposal under `docs/changes/` rather than rewriting the reasoning that made version one correct. `spec-drift` runs whenever you come back: after a milestone, before a new feature, or when you've been away long enough to not trust the document. `spec-refactor` runs when drift is clean and the code is still expensive.
 
-Without the second, the first is a document that's correct for about a month.
+Without the fifth, the first is a document that's correct for about a month. Without the sixth, it stays correct and gets slower to change every milestone.
