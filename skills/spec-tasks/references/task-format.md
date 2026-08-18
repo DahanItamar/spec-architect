@@ -41,7 +41,9 @@ Twelve tasks is a comfortable ceiling for one milestone. Past twenty, the milest
 ### What is not a task
 
 - **"Write tests for X."** Tests are part of the task that makes X true, not a separate step. A task list where testing is deferred to the end produces a codebase where testing is deferred forever.
-- **"Refactor Y."** Unless a criterion requires it, this is drive-by work. Out of scope.
+- **"Refactor Y."** Unless a criterion requires it, this is drive-by work — and it belongs to
+  `spec-refactor`, which writes it as an `R-NN` line that *preserves* criteria instead of closing
+  one. A refactoring in this file has no criterion to cite, which is exactly why it does not belong.
 - **"Research Z."** If a decision is unmade, it belongs in the spec's Open Questions, blocking this milestone — not hidden as a task.
 
 ---

@@ -1,17 +1,17 @@
 ---
 name: spec-tasks
-description: Stage 3 of 5 in the spec chain. Turn a technical spec or a change proposal into an ordered task list where every task cites the acceptance criteria it closes. Use after spec-architect has written docs/SPEC.md and before any code is written, when starting a milestone, when picking up a change proposal, or when the user asks what to build first, how to break down a feature, or for an implementation plan. Writes TASKS.md. Writes no code — that is spec-implement's job.
+description: Stage 3 of 6 in the spec chain. Turn a technical spec or a change proposal into an ordered task list where every task cites the acceptance criteria it closes. Use after spec-architect has written docs/SPEC.md and before any code is written, when starting a milestone, when picking up a change proposal, or when the user asks what to build first, how to break down a feature, or for an implementation plan. Writes TASKS.md. Writes no code — that is spec-implement's job.
 ---
 
 # Spec Tasks
 
-**Stage 3 of 5 — Tasks.** Before doing anything else, print this banner so the user
+**Stage 3 of 6 — Tasks.** Before doing anything else, print this banner so the user
 can see where they are in the chain, filled in for this run:
 
 ```markdown
-> **The spec chain — stage 3 of 5 · Tasks**
+> **The spec chain — stage 3 of 6 · Tasks**
 >
-> `1 constitution` · `2 spec` · **▶ 3 tasks** · `4 implement` · `5 drift`
+> `1 constitution` · `2 spec` · **▶ 3 tasks** · `4 implement` · `5 drift` · `6 refactor`
 >
 > **Behind you:** `docs/SPEC.md` with numbered `AC-###` criteria in §2.1 — this stage cites them, it never invents them.
 > **After this:** `/spec-implement` executes the list, one task at a time.
@@ -116,4 +116,4 @@ A five-task milestone gets five lines and no commentary. A twenty-task milestone
 
 ## Related
 
-`spec-architect` writes the spec and its criteria. `spec-implement` executes this list. `spec-drift` audits the result.
+`spec-architect` writes the spec and its criteria. `spec-implement` executes this list. `spec-drift` audits the result. Structural work that closes no criterion is not a task here — `spec-refactor` writes that list.

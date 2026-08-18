@@ -6,10 +6,19 @@
 
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 
 import { naiveHasConflict, naiveRename, naiveShiftsFor } from './naive.mjs';
 import { detectConflicts, rename, shiftsFor } from './spec-derived.mjs';
 import { validateShift, save } from './drifted.mjs';
+import {
+  detectConflicts as smellyDetect,
+  tooltipDuration,
+  exportDuration,
+} from './smelly.mjs';
+
+const sourceOf = (file) => readFileSync(new URL(file, import.meta.url), 'utf8');
+const countOf = (text, pattern) => (text.match(pattern) ?? []).length;
 
 // ── The same three scenarios, expressed in each model's shape ──────────────────
 
@@ -148,5 +157,52 @@ describe('drifted — the code three weeks after the spec was written', () => {
     assert.equal(specAllows, true);
     assert.equal(codeAllows, false);
     assert.notEqual(specAllows, codeAllows); // the gap, asserted
+  });
+});
+
+// ── Six months later ──────────────────────────────────────────────────────────
+//
+// The opposite failure. Here the code is *right* — every criterion holds, the
+// overnight case works, drift comes back clean — and the file is still the one
+// nobody wants to open. Correctness and changeability are different properties,
+// and only one of them has a stage before this.
+
+describe('smelly — passes every criterion and is still unshippable', () => {
+  const smelly = sourceOf('./smelly.mjs');
+  const derived = sourceOf('./spec-derived.mjs');
+  const night = overnight.spec.existing[0]; // 22:00 → 06:00, endMinute 1800
+
+  test('behaves exactly like the spec-derived version — spec-drift finds nothing', () => {
+    for (const scenario of [plain.spec, overnight.spec]) {
+      assert.deepEqual(
+        smellyDetect(scenario.candidate, scenario.existing),
+        detectConflicts(scenario.candidate, scenario.existing),
+      );
+    }
+    const other = { ...plain.spec.candidate, id: 's3', employeeId: 'e2' };
+    assert.deepEqual(smellyDetect(other, plain.spec.existing), []);
+  });
+
+  test('SM-001 Shotgun Surgery: one rule kind is known in four places', () => {
+    // Adding M3's rest-period rule means four more edits, and nothing will ask
+    // for them — the detector, the export flag, the label, and the badge.
+    assert.equal(countOf(smelly, /'overlap'/g), 4);
+    assert.equal(countOf(derived, /'overlap'/g), 1);
+  });
+
+  test('SM-002 Duplicate Code: the same day arithmetic, copied three times', () => {
+    assert.equal(countOf(smelly, /Date\.UTC\(/g), 3);
+    assert.equal(countOf(derived, /Date\.UTC\(/g), 1);
+  });
+
+  test('and the copies have already diverged, in the one path no criterion covers', () => {
+    // Both are the duration of the same shift. One of them is wrong, and it is
+    // wrong only for the case the spec went to the trouble of allowing.
+    assert.equal(exportDuration(night), 480); // 22:00 → 06:00 is eight hours
+    assert.equal(tooltipDuration(night), -960); // the grid says minus sixteen
+
+    // Nothing in §2.1 mentions the tooltip, so this is not drift and stage 5 is
+    // right to stay silent. It is a smell, and it is already a defect.
+    assert.notEqual(exportDuration(night), tooltipDuration(night));
   });
 });

@@ -1,20 +1,20 @@
 ---
 name: spec-drift
-description: Stage 5 of 5 in the spec chain. Check whether the code still matches the project's technical spec, and realign whichever side is wrong. Use when the user asks if the spec is still accurate, wants a spec audit or drift check, says the docs are stale or out of date, is returning to a project after a break, is about to onboard someone (or a fresh Claude session) onto a codebase with a spec, or has just finished a milestone. Also use before writing a new feature against an existing spec, to confirm the ground it assumes is still real. Reads docs/SPEC.md (or SPEC.md) and reports gaps as regressions or staleness — never silently rewrites either side.
+description: Stage 5 of 6 in the spec chain. Check whether the code still matches the project's technical spec, and realign whichever side is wrong. Use when the user asks if the spec is still accurate, wants a spec audit or drift check, says the docs are stale or out of date, is returning to a project after a break, is about to onboard someone (or a fresh Claude session) onto a codebase with a spec, or has just finished a milestone. Also use before writing a new feature against an existing spec, to confirm the ground it assumes is still real. Reads docs/SPEC.md (or SPEC.md) and reports gaps as regressions or staleness — never silently rewrites either side.
 ---
 
 # Spec Drift
 
-**Stage 5 of 5 — Drift.** Before doing anything else, print this banner so the user
+**Stage 5 of 6 — Drift.** Before doing anything else, print this banner so the user
 can see where they are in the chain, filled in for this run:
 
 ```markdown
-> **The spec chain — stage 5 of 5 · Drift**
+> **The spec chain — stage 5 of 6 · Drift**
 >
-> `1 constitution` · `2 spec` · `3 tasks` · `4 implement` · **▶ 5 drift**
+> `1 constitution` · `2 spec` · `3 tasks` · `4 implement` · **▶ 5 drift** · `6 refactor`
 >
 > **Behind you:** code built against the spec — by this pipeline or by hand.
-> **After this:** back to `/spec-architect` in delta mode for the next change. The chain loops here; it does not end.
+> **After this:** `/spec-refactor` if the code is right and the structure is what hurts — otherwise back to `/spec-architect` in delta mode for the next change. The chain loops; it does not end.
 ```
 
 The chain starts at `/spec-constitution`. Then begin the workflow below, naming each phase as you enter it.
@@ -110,7 +110,7 @@ Then let the user choose. Batch the decisions into one `AskUserQuestion` call wh
 
 Fix only what the user accepted.
 
-- **Fixing code:** make the minimal change that satisfies the spec claim. If the fix is larger than a few lines, say so and stop — a drift check is not a refactor.
+- **Fixing code:** make the minimal change that satisfies the spec claim. If the fix is larger than a few lines, say so and stop — a drift check is not a refactor, and `/spec-refactor` is the stage that owns structural work.
 - **Updating the spec:** edit the section in place, keep its voice and structure, and never delete a recorded reason. If a Decision genuinely reversed, rewrite it as a Decision with the new choice and what changed — the record of *why* is the most valuable thing in the document, and quietly dropping it is how a spec turns back into prose.
 - **New things with no home:** a component or endpoint the spec never mentioned gets added to the right section, not appended to the end.
 
@@ -147,3 +147,5 @@ Match the report to the drift. A spec checked weekly should usually come back cl
 ## Related
 
 `spec-architect` writes the spec this skill checks, and the change proposals it merges. `spec-tasks` and `spec-implement` sit between them. If the project has no spec yet, `spec-architect` is the one to run first.
+
+`spec-refactor` answers the question this skill cannot: whether code that satisfies every criterion is still shaped to accept the next one. A clean drift report is its precondition — structure is only worth arguing about once behavior is right.

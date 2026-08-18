@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "spec-architect",
   "displayName": "Spec Architect",
-  "version": "2.0.0",
-  "description": "The five-stage spec pipeline for Claude Code. spec-constitution sets the repository's rules, spec-architect writes the spec and its acceptance criteria, spec-tasks turns it into an ordered list, spec-implement executes one task at a time verifying each against the criteria it cites, and spec-drift audits the result. The AC-### identifiers are what join them: assigned once, cited by every later stage.",
+  "version": "3.0.0",
+  "description": "The six-stage spec pipeline for Claude Code. spec-constitution sets the repository's rules, spec-architect writes the spec and its acceptance criteria, spec-tasks turns it into an ordered list, spec-implement executes one task at a time verifying each against the criteria it cites, spec-drift audits whether the code still does what the spec says, and spec-refactor audits whether it can still be changed — proposing structural work that preserves every criterion rather than closing a new one. The AC-### identifiers are what join them: assigned once, cited by every later stage.",
   "author": {
     "name": "Itamar Dahan",
     "url": "https://github.com/DahanItamar"
@@ -21,6 +21,10 @@
     "tasks",
     "implementation",
     "drift",
-    "audit"
+    "audit",
+    "refactoring",
+    "code-smells",
+    "dead-code",
+    "technical-debt"
   ]
 }

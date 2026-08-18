@@ -1,17 +1,17 @@
 ---
 name: spec-constitution
-description: Stage 1 of 5 in the spec chain. Write the repository's constitution — the principles, conventions, and verification command that every later spec, task list, and implementation inherits. Use at the start of a project, before running spec-architect on a new repo, when conventions live only in reviewers' heads, when a team keeps re-litigating the same review comments, or when an agent keeps producing code that doesn't match the house style. Writes docs/CONSTITUTION.md. Does not describe features — that is spec-architect's job.
+description: Stage 1 of 6 in the spec chain. Write the repository's constitution — the principles, conventions, and verification command that every later spec, task list, and implementation inherits. Use at the start of a project, before running spec-architect on a new repo, when conventions live only in reviewers' heads, when a team keeps re-litigating the same review comments, or when an agent keeps producing code that doesn't match the house style. Writes docs/CONSTITUTION.md. Does not describe features — that is spec-architect's job.
 ---
 
 # Spec Constitution
 
-**Stage 1 of 5 — Constitution.** Before doing anything else, print this banner so the user
+**Stage 1 of 6 — Constitution.** Before doing anything else, print this banner so the user
 can see where they are in the chain, filled in for this run:
 
 ```markdown
-> **The spec chain — stage 1 of 5 · Constitution**
+> **The spec chain — stage 1 of 6 · Constitution**
 >
-> **▶ 1 constitution** · `2 spec` · `3 tasks` · `4 implement` · `5 drift`
+> **▶ 1 constitution** · `2 spec` · `3 tasks` · `4 implement` · `5 drift` · `6 refactor`
 >
 > **Behind you:** nothing — this is the start of the chain.
 > **After this:** `/spec-architect` writes the spec that inherits this document.
@@ -109,7 +109,8 @@ Follow this structure exactly:
 
 ## Verification
 **Verify command:** `<the command, or "none — verified by reading">`
-<What it covers, and what it does not.>
+**Static analysis:** `<the dead-code / lint command, or "none">`
+<What each covers, and what it does not.>
 
 ## Standing decisions
 <Choices made without explicit confirmation, numbered so any one can be rejected.>

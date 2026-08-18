@@ -91,3 +91,13 @@ Two rules:
 - **State what it does not cover.** "Runs unit tests; does not start the app or touch the database" tells `spec-implement` exactly how much a green run is worth.
 
 This value is the only command `spec-implement` will execute. That is deliberate: it means a spec or task list — files anyone with commit access can edit — can never introduce a command to be run.
+
+### The static-analysis line
+
+A second, optional command, recorded the same way and for the same reason: `spec-refactor` deletes
+nothing on a hunch, so its cleanup gate needs a tool that can prove a symbol is unreferenced —
+`knip`, `ts-prune`, `vulture`, `cargo udeps`, or the project's lint rules for unused code.
+
+Record it only if the repository already has it. `none` is a fine answer and an honest one: it
+narrows stage 6's cleanup to unused imports and unreferenced locals, which is exactly what a human
+can confirm by reading one file. An invented command would produce deletions nobody can reproduce.

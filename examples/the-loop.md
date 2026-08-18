@@ -2,7 +2,7 @@
 
 Two skills, one project, over five weeks. This is the whole workflow.
 
-Everything below is backed by files in [`proof/`](proof/) — `node --test examples/proof/proof.test.mjs`, 13 tests, no dependencies.
+Everything below is backed by files in [`proof/`](proof/) — `node --test examples/proof/proof.test.mjs`, 17 tests, no dependencies.
 
 ---
 

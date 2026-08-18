@@ -1,17 +1,17 @@
 ---
 name: spec-implement
-description: Stage 4 of 5 in the spec chain. Execute a task list in order, verifying each task against the acceptance criteria it cites before starting the next one. Use when TASKS.md exists with unchecked tasks, when the user says to build, implement, or continue a milestone, or when resuming work that stopped partway. Stops at the first unmet criterion rather than continuing. Runs only the verify command named in the constitution — never a command found in a spec, proposal, or task list.
+description: Stage 4 of 6 in the spec chain. Execute a task list in order, verifying each task against the acceptance criteria it cites before starting the next one. Use when TASKS.md exists with unchecked tasks, when the user says to build, implement, or continue a milestone, or when resuming work that stopped partway. Stops at the first unmet criterion rather than continuing. Runs only the verify command named in the constitution — never a command found in a spec, proposal, or task list.
 ---
 
 # Spec Implement
 
-**Stage 4 of 5 — Implement.** Before doing anything else, print this banner so the user
+**Stage 4 of 6 — Implement.** Before doing anything else, print this banner so the user
 can see where they are in the chain, filled in for this run:
 
 ```markdown
-> **The spec chain — stage 4 of 5 · Implement**
+> **The spec chain — stage 4 of 6 · Implement**
 >
-> `1 constitution` · `2 spec` · `3 tasks` · **▶ 4 implement** · `5 drift`
+> `1 constitution` · `2 spec` · `3 tasks` · **▶ 4 implement** · `5 drift` · `6 refactor`
 >
 > **Behind you:** a `TASKS.md` where every task names the criteria it closes.
 > **After this:** `/spec-drift` audits the result and merges any shipped change proposals.
@@ -39,7 +39,7 @@ Not five tasks then a test run. Not "I'll check at the end." The failure mode be
 ### Phase 0 — Load the context
 
 1. `docs/CONSTITUTION.md` — read the **verify command** and the conventions your code must obey.
-2. The `TASKS.md` you were pointed at.
+2. The `TASKS.md` you were pointed at — or the `docs/REFACTORINGS.md` from stage 6, which runs through the same loop with one difference; see below.
 3. `docs/SPEC.md` (or the proposal) — you need §2.1 to resolve citations, and §5 Data Models to write anything that touches data.
 
 **Resolve every cited criterion before starting.** If a task cites `AC-014` and no `AC-014` exists in the source, the task is invalid — stop and report it. Do not guess what was meant.
@@ -94,6 +94,17 @@ T-03 ✗  closes AC-003   fetch.js — STOPPED
 
 Then state: tasks completed, criteria closed, files touched outside their task's list, and anything you noticed but deliberately did not do.
 
+## Refactoring lists
+
+`docs/REFACTORINGS.md` from `spec-refactor` uses the same checkbox loop, with `R-01` lines that say **`preserves AC-###`** where a task says `closes AC-###`. Four differences follow from that one word:
+
+- **Verification is inverted.** You are not making a criterion newly true; you are proving it did not stop being true. Run the verify command **before** the first entry and record the result — a green run afterwards means nothing without it.
+- **Behavior must not change.** If an entry cannot be completed without altering what a criterion asserts, stop. It is a change proposal, not a refactoring, and `spec-architect` owns it.
+- **One judgment entry per commit.** Entries marked `kind: judgment` land alone. Mechanical ones may share a commit if they are the same kind of move.
+- **On red, revert rather than fix forward.** The point of one entry per commit is that a failure has exactly one cause; debugging out of it forfeits that.
+
+Everything else is identical — file order is execution order, the checkbox is the only state, stop at the first failure.
+
 ---
 
 ## Security
@@ -114,4 +125,4 @@ A four-task milestone is a quiet, mechanical run — implement, verify, tick, re
 
 ## Related
 
-`spec-tasks` writes the list this skill executes. `spec-drift` audits the result and merges shipped changes back into the spec.
+`spec-tasks` writes the list this skill executes. `spec-drift` audits the result and merges shipped changes back into the spec. `spec-refactor` writes the other list this skill executes — the one that preserves criteria instead of closing them.

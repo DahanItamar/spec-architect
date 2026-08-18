@@ -10,13 +10,14 @@ Requires Node 18+. It also runs on every push — see [`.github/workflows/test.y
 
 ## What runs
 
-Three versions of the same feature — *does this shift conflict with an existing one?*
+Four versions of the same feature — *does this shift conflict with an existing one?*
 
 | File | What it is |
 | --- | --- |
 | [`naive.mjs`](naive.mjs) | The check from the "without the skill" run, lifted out of the component unchanged. A shift is `{ employee, day, start, end }` — all strings, because nothing forced otherwise. |
 | [`spec-derived.mjs`](spec-derived.mjs) | The same feature built against §5 and §8 of [the spec](../shift-planner-spec.md). A shift is `{ id, employeeId, date, startMinute, endMinute }`. |
 | [`drifted.mjs`](drifted.mjs) | `spec-derived.mjs` three weeks later, after one locally sensible validation change silently reversed §8. This is what [`spec-drift`](../the-loop.md) exists to catch. |
+| [`smelly.mjs`](smelly.mjs) | `spec-derived.mjs` six months later. Every criterion still holds and drift comes back clean — and adding the next rule means four edits nothing will ask for. This is what `spec-refactor` exists to catch. |
 
 The first two are fed the same three scenarios in their own shapes.
 
@@ -39,9 +40,14 @@ The first two are fed the same three scenarios in their own shapes.
   ✔ but the night shift can no longer be saved — §8 is contradicted
   ✔ and the rejection is silent: the overlap is simply never detected
   ✔ the spec still says the opposite — this is what spec-drift reports
+▶ smelly — passes every criterion and is still unshippable
+  ✔ behaves exactly like the spec-derived version — spec-drift finds nothing
+  ✔ SM-001 Shotgun Surgery: one rule kind is known in four places
+  ✔ SM-002 Duplicate Code: the same day arithmetic, copied three times
+  ✔ and the copies have already diverged, in the one path no criterion covers
 
-ℹ tests 13
-ℹ pass 13
+ℹ tests 17
+ℹ pass 17
 ℹ fail 0
 ```
 
@@ -86,3 +92,25 @@ assert.notEqual(specAllows, codeAllows);
 ```
 
 That last assertion is the gap `spec-drift` reports. Nothing about the drifted code looks wrong in isolation — which is precisely why nobody catches it without comparing the two artifacts on purpose. Full walkthrough in [the-loop.md](../the-loop.md).
+
+## And then it stopped drifting, and got worse anyway
+
+The fourth block is the case stage 5 is blind to, and the reason there is a stage 6.
+
+[`smelly.mjs`](smelly.mjs) is the spec-derived version six months and four features later. It is **correct**. Every criterion holds, the overnight case works, identity is still an id — run `spec-drift` over it and the report comes back clean, which is the honest answer to the question that skill asks.
+
+It is also the file nobody wants to open, for two reasons a behavioural check cannot see:
+
+```js
+assert.equal(countOf(smelly, /'overlap'/g), 4);   // one rule kind, four places
+assert.equal(countOf(smelly, /Date\.UTC\(/g), 3); // one calculation, three copies
+```
+
+The first is **Shotgun Surgery**: the conflict kind is known to the detector, the export, the label and the badge, so the rest-period rule scheduled for the next milestone costs four edits that nothing will ask for. The second is **Duplicate Code that has already diverged** — the tooltip's copy wraps the end minute at midnight, so an overnight shift displays as `-960` minutes:
+
+```js
+assert.equal(exportDuration(night), 480);    // 22:00 → 06:00 is eight hours
+assert.equal(tooltipDuration(night), -960);  // the grid says minus sixteen
+```
+
+No criterion mentions the tooltip. So this is not drift, stage 5 is right to stay silent, and the defect sits there being green. Correctness and changeability are different properties, and asserting one says nothing about the other — which is exactly the split between the last two stages.

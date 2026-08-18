@@ -1,17 +1,17 @@
 ---
 name: spec-architect
-description: Stage 2 of 5 in the spec chain. Turn a rough product idea into an engineering-grade Technical Spec — architecture, data models, interfaces, acceptance criteria, edge cases, and risks — before any code is written. Use when someone describes something they want to build ("I want an app that…", "I'm thinking of building…", "how should I structure a…"), asks for a PRD, tech spec, architecture doc, system design, data model, or stack recommendation, or is starting a new project or major feature from only a loose description. Also use to reverse-engineer a spec from an existing codebase before a large change. Produces one Markdown file meant to live in the repo and be loaded as project context.
+description: Stage 2 of 6 in the spec chain. Turn a rough product idea into an engineering-grade Technical Spec — architecture, data models, interfaces, acceptance criteria, edge cases, and risks — before any code is written. Use when someone describes something they want to build ("I want an app that…", "I'm thinking of building…", "how should I structure a…"), asks for a PRD, tech spec, architecture doc, system design, data model, or stack recommendation, or is starting a new project or major feature from only a loose description. Also use to reverse-engineer a spec from an existing codebase before a large change. Produces one Markdown file meant to live in the repo and be loaded as project context.
 ---
 
 # Spec Architect
 
-**Stage 2 of 5 — Spec.** Before doing anything else, print this banner so the user
+**Stage 2 of 6 — Spec.** Before doing anything else, print this banner so the user
 can see where they are in the chain, filled in for this run:
 
 ```markdown
-> **The spec chain — stage 2 of 5 · Spec**
+> **The spec chain — stage 2 of 6 · Spec**
 >
-> `1 constitution` · **▶ 2 spec** · `3 tasks` · `4 implement` · `5 drift`
+> `1 constitution` · **▶ 2 spec** · `3 tasks` · `4 implement` · `5 drift` · `6 refactor`
 >
 > **Behind you:** `docs/CONSTITUTION.md`, if one exists — it fixes the stack, layout and verify command before anything here is decided.
 > **After this:** `/spec-tasks` turns the build order into a task list.
@@ -168,4 +168,4 @@ Match depth to stakes. A weekend CLI tool gets a one-page spec — sections 1, 2
 
 ## Related
 
-`spec-constitution` writes the repo-wide rules this spec inherits. `spec-tasks` turns this spec into an ordered task list. `spec-drift` checks the code against it later.
+`spec-constitution` writes the repo-wide rules this spec inherits. `spec-tasks` turns this spec into an ordered task list. `spec-drift` checks the code against it later. Anything `spec-refactor` finds that cannot be fixed without changing a criterion comes back here as a change proposal.
