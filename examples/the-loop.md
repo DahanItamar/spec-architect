@@ -131,6 +131,8 @@ Four features later, drift comes back **clean**. Every criterion holds, the over
 /spec-refactor
 ```
 
+`docs/refactorings/0003-m3-rest-period/REPORT.md`:
+
 ```
 SM-004  Shotgun Surgery — one conflict kind is known in four places
         src/scheduler.js:48, src/export/csv.js:64, src/ui/grid.jsx:99, src/ui/grid.jsx:104

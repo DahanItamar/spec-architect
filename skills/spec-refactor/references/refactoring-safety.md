@@ -7,7 +7,7 @@ Behavior preservation as a property you check rather than a promise you make.
 ## The invariance test
 
 Before proposing any refactoring, answer three questions. A "no" to any of them means it is not a
-refactoring and does not belong in `docs/REFACTORINGS.md`.
+refactoring and does not belong in the report.
 
 1. **Does every `AC-###` covering this code stay true, word for word?**
    Not "still roughly holds". The criterion is a sentence with a trigger and a response; both must

@@ -29,7 +29,7 @@ that made the first version correct.
 > | 3 | `/spec-tasks` | `TASKS.md` | A spec exists and you want an ordered build list |
 > | 4 | `/spec-implement` | code | A task list exists with unchecked boxes |
 > | 5 | `/spec-drift` | a report | Code and spec may have diverged |
-> | 6 | `/spec-refactor` | `docs/REFACTORINGS.md` | The code is right and the shape of it is what hurts. **Optional** |
+> | 6 | `/spec-refactor` | `docs/refactorings/NNNN/` | The code is right and the shape of it is what hurts. **Optional** |
 ```
 
 ## Then look, and route

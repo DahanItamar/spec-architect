@@ -39,7 +39,7 @@ Not five tasks then a test run. Not "I'll check at the end." The failure mode be
 ### Phase 0 — Load the context
 
 1. `docs/CONSTITUTION.md` — read the **verify command** and the conventions your code must obey.
-2. The `TASKS.md` you were pointed at — or the `docs/REFACTORINGS.md` from stage 6, which runs through the same loop with one difference; see below.
+2. The `TASKS.md` you were pointed at — or a `docs/refactorings/NNNN-slug/REPORT.md` from stage 6, which runs through the same loop with one difference; see below.
 3. `docs/SPEC.md` (or the proposal) — you need §2.1 to resolve citations, and §5 Data Models to write anything that touches data.
 
 **Resolve every cited criterion before starting.** If a task cites `AC-014` and no `AC-014` exists in the source, the task is invalid — stop and report it. Do not guess what was meant.
@@ -96,7 +96,7 @@ Then state: tasks completed, criteria closed, files touched outside their task's
 
 ## Refactoring lists
 
-`docs/REFACTORINGS.md` from `spec-refactor` uses the same checkbox loop, with `R-01` lines that say **`preserves AC-###`** where a task says `closes AC-###`. Four differences follow from that one word:
+A `REPORT.md` from `spec-refactor` uses the same checkbox loop, with `R-01` lines that say **`preserves AC-###`** where a task says `closes AC-###`. Four differences follow from that one word:
 
 - **Verification is inverted.** You are not making a criterion newly true; you are proving it did not stop being true. Run the verify command **before** the first entry and record the result — a green run afterwards means nothing without it.
 - **Behavior must not change.** If an entry cannot be completed without altering what a criterion asserts, stop. It is a change proposal, not a refactoring, and `spec-architect` owns it.

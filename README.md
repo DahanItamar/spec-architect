@@ -12,7 +12,7 @@ Plain Markdown, read by Claude Code.
 <a href="https://github.com/DahanItamar/spec-architect/actions/workflows/test.yml"><img alt="CI status on the main branch" src="https://github.com/DahanItamar/spec-architect/actions/workflows/test.yml/badge.svg?branch=main"></a>
 <img alt="17 tests passing across 4 suites" src="https://img.shields.io/badge/tests-17%20passing-1f6f3f?style=flat-square">
 <img alt="zero dependencies" src="https://img.shields.io/badge/dependencies-0-1f6f3f?style=flat-square">
-<img alt="version 3.0.0" src="https://img.shields.io/badge/version-3.0.0-B55400?style=flat-square">
+<img alt="version 3.1.0" src="https://img.shields.io/badge/version-3.1.0-B55400?style=flat-square">
 <a href="LICENSE"><img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-2b2e3a?style=flat-square"></a>
 
 <a href="examples/the-loop.md">The walkthrough</a> ·
@@ -35,7 +35,7 @@ docs/SPEC.md    AC-003  If two shifts for one employee overlap by any minute, th
 
 TASKS.md        - [ ] T-04 Detect overlaps on a minute timeline — closes AC-003
 
-REFACTORINGS.md - [ ] R-02 Extract `toRange`, delete the two copies — preserves AC-003
+REPORT.md       - [ ] R-02 Extract `toRange`, delete the two copies — preserves AC-003
 ```
 
 `closes` in stage 3, `preserves` in stage 6 — one word apart, and the whole difference between
@@ -64,7 +64,7 @@ flowchart LR
 | 3 | `/spec-tasks` | `TASKS.md` | A task is done when a named criterion is satisfied, not when the code looks finished |
 | 4 | `/spec-implement` | code | One task, verify, then the next — stop at the first unmet criterion |
 | 5 | `/spec-drift` | a report | The spec and the code disagree: say *which one* is wrong |
-| 6 | `/spec-refactor` | `docs/REFACTORINGS.md` | Restructure only what blocks scheduled work — and change no criterion doing it |
+| 6 | `/spec-refactor` | `docs/refactorings/NNNN/` | Restructure only what blocks scheduled work — and change no criterion doing it |
 
 Stages 1 and 6 are optional and every stage runs alone. The last two audit different things: drift
 asks whether the code does what the spec says, refactor asks whether code that already does can
@@ -89,7 +89,9 @@ work carry different burdens of proof, and land in separate commits:
 | Risk | deleting something reached reflectively | an unreviewable diff |
 | Commit | its own, apart from any behaviour change | one per refactoring |
 
-Nothing goes on a hunch: `/spec-refactor` writes `docs/REFACTORINGS.md` and changes no code itself.
+Nothing goes on a hunch: `/spec-refactor` writes a numbered report under `docs/refactorings/` and
+changes no code itself. Runs are never overwritten, and every `SM-###` it has ever allocated stays
+in one registry — so a smell that comes back carries the record of being paid off once already.
 
 ## Run it
 
@@ -155,7 +157,7 @@ calculation diverged where no criterion looks — stage 6 catches that.
 - **Nothing executes at install.** No dependencies, no build, no network calls. The only runnable
   code is 5 `.mjs` files under `examples/proof/`, importing `node:test`, `node:assert/strict` and
   `node:fs`.
-- **2,962 lines that load on demand.** Each `SKILL.md` loads on invocation, the largest being 171
+- **3,025 lines that load on demand.** Each `SKILL.md` loads on invocation, the largest being 171
   lines; its references load only at the phase that needs them, so a task list is never written with
   the risk checklist in context.
 - **Change proposals, not spec rewrites.** Once `docs/SPEC.md` exists, `/spec-architect` writes a
