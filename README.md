@@ -72,11 +72,11 @@ still be changed cheaply.
 
 ## Refactoring, and the gate on it
 
-Stage 6 handles code smells and dead code, and two rules keep it from restructuring a working
-system for sport. **A smell is actionable only if it is a Change Preventer for work that is
-actually scheduled** — everything else is logged with an `SM-###` and left alone. And **a refactoring may not
-change what the spec says the system does**: if it needs an `AC-###` reworded it is not a
-refactoring, it is a change proposal for stage 2.
+Stage 6 handles [code smells](https://refactoring.guru/refactoring/smells) and dead code, and two
+rules keep it from restructuring a working system for sport. **A smell is actionable only if it is
+a Change Preventer for work that is actually scheduled** — everything else is logged with an
+`SM-###` and left alone. And **a refactoring may not change what the spec says the system does**:
+if it needs an `AC-###` reworded it is not a refactoring, it is a change proposal for stage 2.
 
 That second rule is what makes "behaviour is preserved" checkable rather than promised — verify
 green before, green after, every cited criterion re-read against the new code. The two halves of the
@@ -162,9 +162,6 @@ calculation diverged where no criterion looks — stage 6 catches that.
   diff under `docs/changes/` and leaves the spec alone — the reasoning that made feature 1 correct
   is the asset. Criteria are retired as tombstones, never reused, because archived task lists still
   cite them.
-
-Smell names are the standard catalogue — Fowler and Beck's vocabulary as organised on
-[refactoring.guru](https://refactoring.guru/refactoring/smells). None of its prose is reproduced.
 
 ---
 
