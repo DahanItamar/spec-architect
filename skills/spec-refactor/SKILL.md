@@ -124,7 +124,7 @@ docs/refactorings/
 
 Take the next ordinal by scanning both `docs/refactorings/` and its `archive/`. Write `REPORT.md`, then update `SMELLS.md` — new rows for new smells, a bumped `Allocation:` line, and a status change for anything this run resolves.
 
-**Never overwrite a previous run.** The registry is the only file that is edited in place, and even there nothing is deleted: a paid-off smell becomes a tombstone. That history is the point — the second time the same `SM-###` blocks a milestone, the record that it was already removed once is the strongest argument available for fixing the cause rather than the instance.
+**Never overwrite a previous run, and never archive one.** The registry is the only file edited in place, and even there nothing is deleted: a paid-off smell becomes a tombstone. Archiving a finished run belongs to `/spec-drift`, which verifies the smells are actually gone before recording that they are. That history is the point — the second time the same `SM-###` blocks a milestone, the record that it was already removed once is the strongest argument available for fixing the cause rather than the instance.
 
 **This skill does not edit code.** Not the easy one, not the obvious one-line deletion. Every stage in this chain that both proposes and applies in one pass eventually applies something nobody agreed to, and on working code that is the one unrecoverable mistake available here.
 
@@ -159,4 +159,4 @@ A five-year-old service will match half the catalogue. Do not report half the ca
 
 ## Related
 
-`spec-drift` runs before this and answers the other question — whether the code still does what it says. `spec-implement` executes the list this stage writes. `spec-architect` takes anything that turns out to need a behavior change, because that is a change proposal and not a refactoring.
+`spec-drift` runs before this and answers the other question — whether the code still does what it says. It also closes the loop afterwards: once every entry in a run is ticked, stage 5 verifies the claims, updates `SMELLS.md` and archives the directory. `spec-implement` executes the list this stage writes. `spec-architect` takes anything that turns out to need a behavior change, because that is a change proposal and not a refactoring.

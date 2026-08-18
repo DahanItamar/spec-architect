@@ -47,6 +47,7 @@ may not know:
 | Drift came back clean, and the next change lands on code people avoid | Behavior is right; structure is the cost | `/spec-refactor` |
 | The user says a feature is harder to add than it should be | That is a Change Preventer, not a spec problem | `/spec-refactor` |
 | Unmerged `docs/changes/*/PROPOSAL.md` | Pending amendments the spec does not carry yet | `/spec-drift` to merge them |
+| A `docs/refactorings/*/REPORT.md` with every entry ticked | Finished work nobody has closed out | `/spec-drift` to verify and archive it |
 | Spec exists, code has moved on | These may have diverged | `/spec-drift` |
 
 **Name exactly one command.** A user who arrives not knowing where to start is not helped by three

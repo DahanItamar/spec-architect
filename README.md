@@ -12,7 +12,7 @@ Plain Markdown, read by Claude Code.
 <a href="https://github.com/DahanItamar/spec-architect/actions/workflows/test.yml"><img alt="CI status on the main branch" src="https://github.com/DahanItamar/spec-architect/actions/workflows/test.yml/badge.svg?branch=main"></a>
 <img alt="17 tests passing across 4 suites" src="https://img.shields.io/badge/tests-17%20passing-1f6f3f?style=flat-square">
 <img alt="zero dependencies" src="https://img.shields.io/badge/dependencies-0-1f6f3f?style=flat-square">
-<img alt="version 3.1.0" src="https://img.shields.io/badge/version-3.1.0-B55400?style=flat-square">
+<img alt="version 3.2.0" src="https://img.shields.io/badge/version-3.2.0-B55400?style=flat-square">
 <a href="LICENSE"><img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-2b2e3a?style=flat-square"></a>
 
 <a href="examples/the-loop.md">The walkthrough</a> ·
@@ -92,6 +92,9 @@ work carry different burdens of proof, and land in separate commits:
 Nothing goes on a hunch: `/spec-refactor` writes a numbered report under `docs/refactorings/` and
 changes no code itself. Runs are never overwritten, and every `SM-###` it has ever allocated stays
 in one registry — so a smell that comes back carries the record of being paid off once already.
+Closing a run out belongs to stage 5, which re-checks that each smell really is gone before writing
+`removed` and archiving the directory: a ticked box records what someone believed, and the registry
+records what is true.
 
 ## Run it
 
@@ -157,7 +160,7 @@ calculation diverged where no criterion looks — stage 6 catches that.
 - **Nothing executes at install.** No dependencies, no build, no network calls. The only runnable
   code is 5 `.mjs` files under `examples/proof/`, importing `node:test`, `node:assert/strict` and
   `node:fs`.
-- **3,025 lines that load on demand.** Each `SKILL.md` loads on invocation, the largest being 171
+- **3,187 lines that load on demand.** Each `SKILL.md` loads on invocation, the largest being 171
   lines; its references load only at the phase that needs them, so a task list is never written with
   the risk checklist in context.
 - **Change proposals, not spec rewrites.** Once `docs/SPEC.md` exists, `/spec-architect` writes a

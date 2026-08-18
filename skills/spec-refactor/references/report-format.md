@@ -26,8 +26,11 @@ one by scanning both directories; do not guess from the highest you happen to se
 **Slugs** are ASCII kebab-case, truncated at 40 characters, naming what the run is *for* — the
 milestone it unblocks, or the sweep it performs.
 
-**A run is archived** once every entry in it is ticked or explicitly abandoned. Move the directory
-to `archive/`, and record the outcome of each `SM-###` in the registry before you do.
+**A run is archived by `/spec-drift`**, not here. Once every entry is ticked or explicitly
+abandoned, stage 5 re-checks that the smells really are gone, records the outcome of each `SM-###`
+in the registry, and moves the directory to `archive/`. Leaving that to the stage that reads the
+document and the code as two separate sources is what stops a ticked box from becoming a permanent
+untruth in the registry.
 
 ## Why a registry, and not just the reports
 
