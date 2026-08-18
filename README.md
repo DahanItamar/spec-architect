@@ -68,8 +68,28 @@ flowchart LR
 
 Stages 1 and 6 are optional and every stage runs alone. The last two audit different things: drift
 asks whether the code does what the spec says, refactor asks whether code that already does can
-still be changed cheaply. **A refactoring that needs an `AC-###` reworded is not a refactoring** —
-it goes back to stage 2 as a change proposal.
+still be changed cheaply.
+
+## Refactoring, and the gate on it
+
+Stage 6 handles code smells and dead code, and two rules keep it from restructuring a working
+system for sport. **A smell is actionable only if it is a Change Preventer for work that is
+actually scheduled** — everything else is logged with an `SM-###` and left alone. And **a refactoring may not
+change what the spec says the system does**: if it needs an `AC-###` reworded it is not a
+refactoring, it is a change proposal for stage 2.
+
+That second rule is what makes "behaviour is preserved" checkable rather than promised — verify
+green before, green after, every cited criterion re-read against the new code. The two halves of the
+work carry different burdens of proof, and land in separate commits:
+
+| | Cleanup | Refactoring |
+| --- | --- | --- |
+| Admitted by | a static-analysis tool flagged it | the gate above |
+| Removes | unused imports, unreferenced locals, dead exports | duplication, shotgun surgery, god functions |
+| Risk | deleting something reached reflectively | an unreviewable diff |
+| Commit | its own, apart from any behaviour change | one per refactoring |
+
+Nothing goes on a hunch: `/spec-refactor` writes `docs/REFACTORINGS.md` and changes no code itself.
 
 ## Run it
 
