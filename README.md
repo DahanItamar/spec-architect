@@ -24,11 +24,10 @@ Plain Markdown, read by Claude Code.
 
 ## The identifier that survives the handoff
 
-Most spec workflows are a handful of prompts that run in order. Nothing travels between them, so by
-the fourth prompt the agent is judging prose it wrote itself against prose it wrote earlier.
-
-What travels here is an identifier. Stage 2 writes each requirement as one EARS sentence with a
-stable `AC-###`, and no later stage may refer to a requirement any other way:
+Most spec workflows are a handful of prompts that run in order, and nothing travels between them —
+so by the fourth prompt the agent is judging prose it wrote itself. What travels here is an
+identifier: stage 2 writes each requirement as one EARS sentence with a stable `AC-###`, and no
+later stage may refer to a requirement any other way.
 
 ```text
 docs/SPEC.md    AC-003  If two shifts for one employee overlap by any minute, then the
@@ -77,18 +76,16 @@ it goes back to stage 2 as a change proposal.
 Requires **Claude Code**. Nothing is installed, compiled or executed.
 
 ```bash
-# as a plugin
 /plugin marketplace add DahanItamar/spec-architect
 /plugin install spec-architect
-
-# or drop the skills in directly
-git clone https://github.com/DahanItamar/spec-architect /tmp/sa \
-  && cp -r /tmp/sa/skills/* ~/.claude/skills/
 ```
 
 Then run **`/spec-start`**. It reads the repository and names the one command to run next —
 `/spec-constitution` on a new repo, `/spec-architect` if the conventions are settled,
 `/spec-implement` if a task list is sitting there half-ticked.
+
+The skills also work copied straight into `~/.claude/skills/`. Pick one route or the other — do
+both and every command shows up twice in the picker, from two copies that drift apart.
 
 > [!IMPORTANT]
 > **The two stages that run shell commands — `/spec-implement` and `/spec-refactor` — run only
@@ -128,29 +125,26 @@ each does to a shift that crosses midnight:
 | `drifted.mjs` — three weeks and one sensible-looking fix later | ✅ | ❌ | ✅ |
 | `smelly.mjs` — six months and four features later | ✅ | ✅ | ❌ |
 
-The last two rows are the argument. `drifted.mjs` passes every test it has and contradicts §8 of
-its own spec, so a night shift silently stops being storable — that is stage 5. `smelly.mjs`
-contradicts nothing, so stage 5 is right to stay silent, and its grid tooltip still reports an
-overnight shift as `-960` minutes, because the same calculation is copied three times and one copy
-diverged — that is stage 6.
+The last two rows are the argument. `drifted.mjs` contradicts §8 of its own spec, so a night shift
+silently stops being storable — stage 5 catches that. `smelly.mjs` contradicts nothing and still
+shows an overnight shift as `-960` minutes in its tooltip, because one of three copies of the same
+calculation diverged where no criterion looks — stage 6 catches that.
 
 ## Under the hood — briefly
 
-- **2,962 lines across 7 skills and 16 reference files.** Each `SKILL.md` loads on invocation, the
-  largest being 171 lines; references load only at the phase that needs them, so a task list is
-  never written with the risk checklist in context.
-- **Nothing executes at install.** No dependencies, no build, no postinstall, no network calls. The
-  only runnable code is 5 `.mjs` files under `examples/proof/`, importing `node:test`,
-  `node:assert/strict`, `node:fs`, and each other.
+- **Nothing executes at install.** No dependencies, no build, no network calls. The only runnable
+  code is 5 `.mjs` files under `examples/proof/`, importing `node:test`, `node:assert/strict` and
+  `node:fs`.
+- **2,962 lines that load on demand.** Each `SKILL.md` loads on invocation, the largest being 171
+  lines; its references load only at the phase that needs them, so a task list is never written with
+  the risk checklist in context.
 - **Change proposals, not spec rewrites.** Once `docs/SPEC.md` exists, `/spec-architect` writes a
-  diff under `docs/changes/` and leaves the spec alone. The reasoning that made feature 1 correct is
-  the asset; rewriting the document for feature 4 deletes it with nobody reading a diff.
-- **Identifiers are retired, never reused.** A criterion that no longer applies stays as a tombstone
-  keeping its `AC-###`, because an archived task list still cites it. `SM-###` smells work the same
-  way, so a smell that reappears carries the record of being paid off once already.
-- **Smell names are the standard catalogue, not a copy of it.** Fowler and Beck's vocabulary as
-  organised on [refactoring.guru](https://refactoring.guru/refactoring/smells), so a finding names
-  something you can look up. No prose from it is reproduced.
+  diff under `docs/changes/` and leaves the spec alone — the reasoning that made feature 1 correct
+  is the asset. Criteria are retired as tombstones, never reused, because archived task lists still
+  cite them.
+
+Smell names are the standard catalogue — Fowler and Beck's vocabulary as organised on
+[refactoring.guru](https://refactoring.guru/refactoring/smells). None of its prose is reproduced.
 
 ---
 
